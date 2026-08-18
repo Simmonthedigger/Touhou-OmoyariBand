@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7551298035447231648}
   - component: {fileID: 8016280946566908835}
   - component: {fileID: 5434061616035335430}
-  - component: {fileID: 2637879081977344367}
+  - component: {fileID: 2762315407153425962}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -130,7 +130,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &2637879081977344367
+--- !u!114 &2762315407153425962
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,8 +139,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5734319362736033398}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43431b44b21f8be40a466fd12872b19b, type: 3}
+  m_Script: {fileID: 11500000, guid: 569152576a9713d4dacedbb49e228c58, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyBulletTest
-  speed: 5
-  direction: {x: 0, y: -1}
+  m_EditorClassIdentifier: Assembly-CSharp::Bullet
