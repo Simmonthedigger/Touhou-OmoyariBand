@@ -513,6 +513,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 124191492}
+  - component: {fileID: 124191493}
   m_Layer: 0
   m_Name: BossControler
   m_TagString: Untagged
@@ -535,6 +536,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1236432021}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &124191493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124191490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05a41ad2834a6f4489ef09f4d12a8b14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossController
+  bossSpriteRenderer: {fileID: 1236432020}
+  bossMovement: {fileID: 893588958}
+  patternEmitters:
+  - {fileID: 267527550}
+  - {fileID: 1653980886}
+  - {fileID: 1793070226}
 --- !u!1 &267527548
 GameObject:
   m_ObjectHideFlags: 0
@@ -1183,7 +1202,7 @@ MonoBehaviour:
     onEventTriggered:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 124191493}
           m_TargetAssemblyTypeName: BossController, Assembly-CSharp
           m_MethodName: MoveToPoint
           m_Mode: 2
@@ -1201,7 +1220,7 @@ MonoBehaviour:
     onEventTriggered:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 124191493}
           m_TargetAssemblyTypeName: BossController, Assembly-CSharp
           m_MethodName: ActivatePatternIndex
           m_Mode: 3
@@ -1219,7 +1238,7 @@ MonoBehaviour:
     onEventTriggered:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 124191493}
           m_TargetAssemblyTypeName: BossController, Assembly-CSharp
           m_MethodName: MoveToPoint
           m_Mode: 2
@@ -1237,7 +1256,7 @@ MonoBehaviour:
     onEventTriggered:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 124191493}
           m_TargetAssemblyTypeName: BossController, Assembly-CSharp
           m_MethodName: ActivatePatternIndex
           m_Mode: 3
@@ -1255,7 +1274,7 @@ MonoBehaviour:
     onEventTriggered:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 124191493}
           m_TargetAssemblyTypeName: BossController, Assembly-CSharp
           m_MethodName: MoveToPoint
           m_Mode: 2
@@ -1273,7 +1292,7 @@ MonoBehaviour:
     onEventTriggered:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 124191493}
           m_TargetAssemblyTypeName: BossController, Assembly-CSharp
           m_MethodName: ActivatePatternIndex
           m_Mode: 3
@@ -1612,7 +1631,7 @@ Transform:
   m_GameObject: {fileID: 1236432018}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.02, y: 5.58, z: 0}
+  m_LocalPosition: {x: 0.01, y: 3.46, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1703,8 +1722,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -849558443
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
@@ -1833,9 +1852,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
   bulletPoolTag: leque
   patternType: 2
-  bulletCount: 16
+  bulletCount: 10
   bulletSpeed: 5
-  fireRate: 0.2
+  fireRate: 0.5
   startAngle: 0
   angleOffsetPerShot: 10
   fanSpreadAngle: 60
