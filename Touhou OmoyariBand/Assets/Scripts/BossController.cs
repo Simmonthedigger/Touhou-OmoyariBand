@@ -42,6 +42,18 @@ public class BossController : MonoBehaviour
         }
     }
 
+    // Adicione estes métodos ao BossController.cs
+
+    public void SetMovementStateIdle()
+    {
+        if (bossMovement != null) bossMovement.StartHoverMode();
+    }
+
+    public void SetMovementStateCircle()
+    {
+        if (bossMovement != null) bossMovement.StartCircleMode();
+    }
+
     public void StopAllPatterns()
     {
         foreach (var emitter in patternEmitters)
