@@ -10,10 +10,11 @@ public class BossMovement : MonoBehaviour
 
     [Header("Configuração de Velocidade")]
     [SerializeField] private float linearSpeed = 3f;
+    [SerializeField] private float transitionSpeed = 3.5f; // Velocidade de transição suave entre estados
 
     [Header("Configuração de Hover (Idle)")]
-    [SerializeField] private float hoverFrequency = 2f; // Velocidade da oscilação
-    [SerializeField] private float hoverAmplitude = 0.5f; // Distância do balanço
+    [SerializeField] private float hoverFrequency = 2f;
+    [SerializeField] private float hoverAmplitude = 0.5f;
 
     [Header("Configuração de Movimento Circular")]
     [SerializeField] private float circleRadius = 2f;
@@ -25,7 +26,6 @@ public class BossMovement : MonoBehaviour
 
     private void Start()
     {
-        // Define o ponto atual da cena como âncora inicial
         anchorPosition = transform.position;
     }
 
@@ -43,20 +43,21 @@ public class BossMovement : MonoBehaviour
 
             case MovementState.Static:
             case MovementState.Linear:
-                // O movimento linear é controlado pela Coroutine
                 break;
         }
     }
 
-    // --- LÓGICAS DE MOVIMENTO ---
+    // --- LÓGICAS DE MOVIMENTO COM TRANSIÇÃO SUAVE ---
 
     private void ApplyHoverMovement()
     {
-        // Movimento senoidal suave para cima e para baixo / lados
         float offsetY = Mathf.Sin(Time.time * hoverFrequency) * hoverAmplitude;
         float offsetX = Mathf.Cos(Time.time * (hoverFrequency * 0.5f)) * (hoverAmplitude * 0.5f);
 
-        transform.position = anchorPosition + new Vector3(offsetX, offsetY, 0f);
+        Vector3 targetHoverPos = anchorPosition + new Vector3(offsetX, offsetY, 0f);
+
+        // Desloca suavemente a posição atual até se alinhar com o ciclo de oscilação
+        transform.position = Vector3.MoveTowards(transform.position, targetHoverPos, transitionSpeed * Time.deltaTime);
     }
 
     private void ApplyCircleMovement()
@@ -66,10 +67,13 @@ public class BossMovement : MonoBehaviour
         float x = anchorPosition.x + Mathf.Cos(angleTimer) * circleRadius;
         float y = anchorPosition.y + Mathf.Sin(angleTimer) * circleRadius;
 
-        transform.position = new Vector3(x, y, transform.position.z);
+        Vector3 targetCirclePos = new Vector3(x, y, transform.position.z);
+
+        // Transiciona suavemente até entrar no raio de órbita do círculo
+        transform.position = Vector3.MoveTowards(transform.position, targetCirclePos, transitionSpeed * Time.deltaTime);
     }
 
-    // --- MÉTODOS PÚBLICOS (CHAMADOS PELO BOSS CONTROLLER / TIMELINE) ---
+    // --- MÉTODOS DE TRANSIÇÃO E COMANDO ---
 
     public void MoveToPosition(Vector2 targetPosition)
     {
@@ -80,6 +84,7 @@ public class BossMovement : MonoBehaviour
 
     public void StartHoverMode()
     {
+        // Define o ponto onde o Boss está no momento como a nova âncora do Idle
         anchorPosition = transform.position;
         SetState(MovementState.IdleHover);
     }
@@ -87,7 +92,18 @@ public class BossMovement : MonoBehaviour
     public void StartCircleMode()
     {
         anchorPosition = transform.position;
-        angleTimer = 0f;
+
+        // Ajusta o ângulo inicial com base na posição atual para não dar "tranco" ao entrar no círculo
+        Vector2 offset = transform.position - anchorPosition;
+        if (offset.sqrMagnitude > 0.001f)
+        {
+            angleTimer = Mathf.Atan2(offset.y, offset.x);
+        }
+        else
+        {
+            angleTimer = 0f;
+        }
+
         SetState(MovementState.Circle);
     }
 
@@ -105,9 +121,9 @@ public class BossMovement : MonoBehaviour
         }
 
         transform.position = target;
-        anchorPosition = target; // Atualiza a âncora para o novo ponto
+        anchorPosition = target;
 
-        // Transiciona automaticamente para o estado Idle após chegar ao destino
-        SetState(MovementState.IdleHover);
+        // Transiciona de forma limpa para o Idle após chegar ao destino
+        StartHoverMode();
     }
 }
