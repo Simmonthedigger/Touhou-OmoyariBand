@@ -134,6 +134,8 @@ public class BulletPatternEmitter : MonoBehaviour
         GameObject bulletObj = ObjectPoolManager.Instance.SpawnFromPool(bulletPoolTag, transform.position, Quaternion.identity);
         if (bulletObj != null && bulletObj.TryGetComponent<Bullet>(out Bullet bullet))
         {
+            // Garante que o GameObject esteja ativo na cena
+            bullet.gameObject.SetActive(true);
             bullet.Initialize(direction, bulletSpeed);
         }
     }

@@ -1265,8 +1265,8 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1236432023}
           m_TargetAssemblyTypeName: BossController, Assembly-CSharp
-          m_MethodName: SetMovementStateCircle
-          m_Mode: 1
+          m_MethodName: ActivatePatternIndex
+          m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1283,7 +1283,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1236432023}
           m_TargetAssemblyTypeName: BossController, Assembly-CSharp
-          m_MethodName: SetMovementStateIdle
+          m_MethodName: SetMovementStateCircle
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1940,8 +1940,8 @@ MonoBehaviour:
   transitionSpeed: 1
   hoverFrequency: 5
   hoverAmplitude: 3
-  circleRadius: 2
-  circleSpeed: 2
+  circleRadius: 5
+  circleSpeed: 5
 --- !u!1 &1329823686
 GameObject:
   m_ObjectHideFlags: 0
@@ -2063,16 +2063,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd294d2d3cc2fc8478b8e30bdf2e3ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
-  pools:
+  poolConfigs:
   - tag: spin
-    prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
-    initialSize: 200
-  - tag: leque
-    prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
-    initialSize: 200
-  - tag: BossBulletRed
-    prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
-    initialSize: 200
+    prefab: {fileID: 0}
+    defaultCapacity: 0
+    maxSize: 0
 --- !u!4 &1507900651
 Transform:
   m_ObjectHideFlags: 0

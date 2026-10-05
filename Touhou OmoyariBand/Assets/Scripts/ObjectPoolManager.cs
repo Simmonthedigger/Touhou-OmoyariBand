@@ -1,20 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool; // Namespace obrigatório para a exigência da atividade
 
 public class ObjectPoolManager : MonoBehaviour
 {
     public static ObjectPoolManager Instance { get; private set; }
 
     [System.Serializable]
-    public struct Pool
+    public struct PoolConfig
     {
         public string tag;
         public GameObject prefab;
-        public int initialSize;
+        public int defaultCapacity;
+        public int maxSize;
     }
 
-    [SerializeField] private List<Pool> pools;
-    private Dictionary<string, Queue<GameObject>> poolDictionary;
+    [SerializeField] private List<PoolConfig> poolConfigs;
+
+    // Dicionário mapeando a Tag para a Interface da classe nativa ObjectPool
+    private Dictionary<string, IObjectPool<GameObject>> poolDictionary;
 
     private void Awake()
     {
@@ -26,23 +30,26 @@ public class ObjectPoolManager : MonoBehaviour
 
     private void InitializePools()
     {
-        poolDictionary = new Dictionary<string, Queue<GameObject>>();
+        poolDictionary = new Dictionary<string, IObjectPool<GameObject>>();
 
-        foreach (Pool pool in pools)
+        foreach (var config in poolConfigs)
         {
-            Queue<GameObject> objectPool = new Queue<GameObject>();
+            // Criação do ObjectPool nativo da Unity para cada Tag
+            var newPool = new ObjectPool<GameObject>(
+                createFunc: () => Instantiate(config.prefab, transform),
+                actionOnGet: (obj) => obj.SetActive(true),
+                actionOnRelease: (obj) => obj.SetActive(false),
+                actionOnDestroy: (obj) => Destroy(obj),
+                collectionCheck: false,
+                defaultCapacity: config.defaultCapacity > 0 ? config.defaultCapacity : 50,
+                maxSize: config.maxSize > 0 ? config.maxSize : 500
+            );
 
-            for (int i = 0; i < pool.initialSize; i++)
-            {
-                GameObject obj = Instantiate(pool.prefab, transform);
-                obj.SetActive(false);
-                objectPool.Enqueue(obj);
-            }
-
-            poolDictionary.Add(pool.tag, objectPool);
+            poolDictionary.Add(config.tag, newPool);
         }
     }
 
+    // Pega um objeto do Pool nativo
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
     {
         if (!poolDictionary.ContainsKey(tag))
@@ -51,26 +58,31 @@ public class ObjectPoolManager : MonoBehaviour
             return null;
         }
 
-        Queue<GameObject> poolQueue = poolDictionary[tag];
+        IObjectPool<GameObject> pool = poolDictionary[tag];
+        GameObject obj = pool.Get();
 
-        // Se a fila estiver vazia, cria um novo objeto dinamicamente para expandir o pool
-        GameObject objToSpawn;
-        if (poolQueue.Count > 0 && !poolQueue.Peek().activeSelf)
+        obj.transform.position = position;
+        obj.transform.rotation = rotation;
+
+        // Injeta a referência da pool e da tag no próprio tiro
+        if (obj.TryGetComponent<Bullet>(out Bullet bullet))
         {
-            objToSpawn = poolQueue.Dequeue();
+            bullet.SetPoolReference(pool);
+        }
+
+        return obj;
+    }
+
+    // Devolve o objeto ao Pool nativo
+    public void ReturnToPool(string tag, GameObject obj)
+    {
+        if (poolDictionary.TryGetValue(tag, out IObjectPool<GameObject> pool))
+        {
+            pool.Release(obj);
         }
         else
         {
-            // Busca o prefab correspondente para instanciar extra
-            Pool pool = pools.Find(p => p.tag == tag);
-            objToSpawn = Instantiate(pool.prefab, transform);
+            obj.SetActive(false);
         }
-
-        objToSpawn.transform.position = position;
-        objToSpawn.transform.rotation = rotation;
-        objToSpawn.SetActive(true);
-
-        poolQueue.Enqueue(objToSpawn);
-        return objToSpawn;
     }
 }
