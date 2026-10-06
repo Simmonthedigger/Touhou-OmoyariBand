@@ -1283,11 +1283,11 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1236432023}
           m_TargetAssemblyTypeName: BossController, Assembly-CSharp
-          m_MethodName: SetMovementStateCircle
-          m_Mode: 1
+          m_MethodName: MoveToPoint
+          m_Mode: 2
           m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_ObjectArgument: {fileID: 1151673832}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -1819,6 +1819,7 @@ GameObject:
   - component: {fileID: 1236432020}
   - component: {fileID: 1236432023}
   - component: {fileID: 1236432024}
+  - component: {fileID: 1236432025}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -1935,13 +1936,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d18b5f95840874f46a594c18a550a508, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossMovement
-  currentState: 2
+  currentState: 0
   linearSpeed: 3
   transitionSpeed: 1
   hoverFrequency: 5
   hoverAmplitude: 3
-  circleRadius: 5
+  circleRadius: 20
   circleSpeed: 5
+--- !u!95 &1236432025
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236432018}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7eec9b6a2467c22439dcdfabb914710b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1329823686
 GameObject:
   m_ObjectHideFlags: 0
@@ -2065,9 +2088,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
   poolConfigs:
   - tag: spin
-    prefab: {fileID: 0}
-    defaultCapacity: 0
-    maxSize: 0
+    prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
+    defaultCapacity: 50
+    maxSize: 200
+  - tag: leque
+    prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
+    defaultCapacity: 50
+    maxSize: 200
+  - tag: BossBulletRed1
+    prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
+    defaultCapacity: 50
+    maxSize: 200
+  - tag: BossBulletRed
+    prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
+    defaultCapacity: 50
+    maxSize: 200
 --- !u!4 &1507900651
 Transform:
   m_ObjectHideFlags: 0
@@ -2251,7 +2286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b29421b74bae2549b5877152c8f796b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
-  bulletPoolTag: BossBulletRed
+  bulletPoolTag: BossBulletRed1
   patternType: 0
   bulletCount: 16
   bulletSpeed: 5

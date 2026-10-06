@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool; // Namespace obrigatório para a exigência da atividade
+using UnityEngine.Pool;
 
 public class ObjectPoolManager : MonoBehaviour
 {
@@ -17,7 +17,6 @@ public class ObjectPoolManager : MonoBehaviour
 
     [SerializeField] private List<PoolConfig> poolConfigs;
 
-    // Dicionário mapeando a Tag para a Interface da classe nativa ObjectPool
     private Dictionary<string, IObjectPool<GameObject>> poolDictionary;
 
     private void Awake()
@@ -34,12 +33,11 @@ public class ObjectPoolManager : MonoBehaviour
 
         foreach (var config in poolConfigs)
         {
-            // Criação do ObjectPool nativo da Unity para cada Tag
             var newPool = new ObjectPool<GameObject>(
                 createFunc: () => Instantiate(config.prefab, transform),
                 actionOnGet: (obj) => obj.SetActive(true),
                 actionOnRelease: (obj) => obj.SetActive(false),
-                actionOnDestroy: (obj) => Destroy(obj),
+                actionOnDestroy: (obj) => DestroyObject(obj), // Método tratado para evitar o erro de Edit Mode
                 collectionCheck: false,
                 defaultCapacity: config.defaultCapacity > 0 ? config.defaultCapacity : 50,
                 maxSize: config.maxSize > 0 ? config.maxSize : 500
@@ -49,7 +47,19 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    // Pega um objeto do Pool nativo
+    // Método seguro para destruição de objetos da Pool
+    private void DestroyObject(GameObject obj)
+    {
+        if (Application.isPlaying)
+        {
+            Destroy(obj);
+        }
+        else
+        {
+            DestroyImmediate(obj);
+        }
+    }
+
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
     {
         if (!poolDictionary.ContainsKey(tag))
@@ -64,7 +74,6 @@ public class ObjectPoolManager : MonoBehaviour
         obj.transform.position = position;
         obj.transform.rotation = rotation;
 
-        // Injeta a referência da pool e da tag no próprio tiro
         if (obj.TryGetComponent<Bullet>(out Bullet bullet))
         {
             bullet.SetPoolReference(pool);
@@ -73,7 +82,6 @@ public class ObjectPoolManager : MonoBehaviour
         return obj;
     }
 
-    // Devolve o objeto ao Pool nativo
     public void ReturnToPool(string tag, GameObject obj)
     {
         if (poolDictionary.TryGetValue(tag, out IObjectPool<GameObject> pool))
