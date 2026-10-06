@@ -1239,169 +1239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageTimelineManager
   musicSource: {fileID: 8893855}
-  stageTimeline:
-  - eventName: Enter
-    timeInSeconds: 0
-    onEventTriggered:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1236432023}
-          m_TargetAssemblyTypeName: BossController, Assembly-CSharp
-          m_MethodName: MoveToPoint
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 1825818179}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    hasBeenTriggered: 0
-  - eventName: shoot
-    timeInSeconds: 5
-    onEventTriggered:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1236432023}
-          m_TargetAssemblyTypeName: BossController, Assembly-CSharp
-          m_MethodName: ActivatePatternIndex
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    hasBeenTriggered: 0
-  - eventName: left
-    timeInSeconds: 10
-    onEventTriggered:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1236432023}
-          m_TargetAssemblyTypeName: BossController, Assembly-CSharp
-          m_MethodName: MoveToPoint
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 1151673832}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    hasBeenTriggered: 0
-  - eventName: shoot2
-    timeInSeconds: 10
-    onEventTriggered:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1236432023}
-          m_TargetAssemblyTypeName: BossController, Assembly-CSharp
-          m_MethodName: ActivatePatternIndex
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 1
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    hasBeenTriggered: 0
-  - eventName: right
-    timeInSeconds: 15
-    onEventTriggered:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1236432023}
-          m_TargetAssemblyTypeName: BossController, Assembly-CSharp
-          m_MethodName: MoveToPoint
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 1982847571}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    hasBeenTriggered: 0
-  - eventName: shoot3
-    timeInSeconds: 15
-    onEventTriggered:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1236432023}
-          m_TargetAssemblyTypeName: BossController, Assembly-CSharp
-          m_MethodName: ActivatePatternIndex
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 2
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    hasBeenTriggered: 0
-  - eventName: shootl
-    timeInSeconds: 5
-    onEventTriggered:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1236432023}
-          m_TargetAssemblyTypeName: BossController, Assembly-CSharp
-          m_MethodName: ActivatePatternIndex
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    hasBeenTriggered: 0
-  - eventName: shoot3
-    timeInSeconds: 10
-    onEventTriggered:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1236432023}
-          m_TargetAssemblyTypeName: BossController, Assembly-CSharp
-          m_MethodName: ActivatePatternIndex
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 1
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    hasBeenTriggered: 0
-  - eventName: shoot3
-    timeInSeconds: 5
-    onEventTriggered:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 921999272}
-          m_TargetAssemblyTypeName: DropBox, Assembly-CSharp
-          m_MethodName: Drop
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 1
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    hasBeenTriggered: 0
+  stageTimeline: []
 --- !u!4 &883268290
 Transform:
   m_ObjectHideFlags: 0
@@ -1801,7 +1639,7 @@ Transform:
   m_GameObject: {fileID: 1151673831}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.23, y: -1.29, z: 0}
+  m_LocalPosition: {x: -9.29, y: -1.31, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1896,7 +1734,7 @@ Transform:
   m_GameObject: {fileID: 1236432018}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.02, y: 6.67, z: 0}
+  m_LocalPosition: {x: -0.12, y: -0.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2487,7 +2325,7 @@ Transform:
   m_GameObject: {fileID: 1982847570}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.7699995, y: -1.1000001, z: 0}
+  m_LocalPosition: {x: 8.95, y: -0.58, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
