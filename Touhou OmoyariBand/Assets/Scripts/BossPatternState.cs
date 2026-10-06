@@ -9,7 +9,10 @@ public class BossPatternState : StateMachineBehaviour
     private bool hasTriggeredNext;
 
     [Header("Ataque do Boss")]
-    [Tooltip("Índice do PatternEmitter nos objetos filhos do Boss (0, 1, 2...)")]
+    [Tooltip("Marque como TRUE para atirar. Desmarque (FALSE) para o Boss apenas se mover sem atirar.")]
+    [SerializeField] private bool shootDuringState = true;
+
+    [Tooltip("Índice do PatternEmitter nos objetos filhos do Boss (0, 1, 2...). Use -1 para nenhum.")]
     [SerializeField] private int patternIndex = 0;
 
     [Header("Movimentação do Boss")]
@@ -24,14 +27,26 @@ public class BossPatternState : StateMachineBehaviour
         timer = 0f;
         hasTriggeredNext = false;
 
+        // Limpa Triggers antigos para evitar pular de estado precocemente
+        animator.ResetTrigger("NextBehavior");
+
         BossController boss = animator.GetComponent<BossController>();
         BossMovement movement = animator.GetComponent<BossMovement>();
 
+        // --- CONTROLE DE TIRO ---
         if (boss != null)
         {
-            boss.ActivatePatternIndex(patternIndex);
+            // Sempre desliga os tiros do estado anterior primeiro
+            boss.StopAllPatterns();
+
+            // Só ativa o tiro se a caixinha 'shootDuringState' estiver marcada E o índice for válido
+            if (shootDuringState && patternIndex >= 0)
+            {
+                boss.ActivatePatternIndex(patternIndex);
+            }
         }
 
+        // --- CONTROLE DE MOVIMENTO ---
         if (movement != null)
         {
             if (!string.IsNullOrEmpty(targetPointName))
@@ -68,7 +83,6 @@ public class BossPatternState : StateMachineBehaviour
     {
         timer += Time.deltaTime;
 
-        // Dispara a transição APENAS UMA VEZ ao estourar o tempo
         if (timer >= stateDuration && !hasTriggeredNext)
         {
             hasTriggeredNext = true;
@@ -78,6 +92,8 @@ public class BossPatternState : StateMachineBehaviour
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        animator.ResetTrigger("NextBehavior");
+
         BossController boss = animator.GetComponent<BossController>();
         if (boss != null)
         {

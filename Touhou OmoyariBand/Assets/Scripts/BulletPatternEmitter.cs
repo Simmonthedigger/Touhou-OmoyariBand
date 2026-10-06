@@ -14,10 +14,10 @@ public class BulletPatternEmitter : MonoBehaviour
     [Header("Parâmetros do Padrão")]
     [SerializeField] private int bulletCount = 16;             // Quantidade de tiros por onda
     [SerializeField] private float bulletSpeed = 5f;            // Velocidade dos tiros
-    [SerializeField] private float fireRate = 0.2f;             // Tempo entre disparos
+    [SerializeField] private float fireRate = 0.15f;           // Tempo em segundos entre disparos
     [SerializeField] private float startAngle = 0f;             // Ângulo inicial
-    [SerializeField] private float angleOffsetPerShot = 10f;    // Rotação incremental (usado na Espiral)
-    [SerializeField] private float fanSpreadAngle = 60f;        // Abertura do leque (usado no Fan)
+    [SerializeField] private float angleOffsetPerShot = 10f;    // Rotação incremental (Espiral)
+    [SerializeField] private float fanSpreadAngle = 60f;        // Abertura do leque (Fan)
 
     [Header("Controle de Rajada")]
     [SerializeField] private bool autoStart = false;
@@ -27,11 +27,14 @@ public class BulletPatternEmitter : MonoBehaviour
     private Coroutine currentPatternCoroutine;
     private float currentSpiralAngle;
 
-    private void Start()
+    private void Awake()
     {
-        GameObject playerObj = GameObject.FindWithTag("Player");
-        if (playerObj != null) playerTransform = playerObj.transform;
+        FindPlayer();
+    }
 
+    private void OnEnable()
+    {
+        FindPlayer();
         currentSpiralAngle = startAngle;
 
         if (autoStart)
@@ -40,9 +43,31 @@ public class BulletPatternEmitter : MonoBehaviour
         }
     }
 
+    private void FindPlayer()
+    {
+        if (playerTransform == null)
+        {
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            if (playerObj != null) playerTransform = playerObj.transform;
+        }
+    }
+
     public void StartFiring()
     {
-        if (currentPatternCoroutine != null) StopCoroutine(currentPatternCoroutine);
+        // Garante a busca do Player caso ele tenha renascido
+        FindPlayer();
+
+        // Limpa qualquer rotina anterior para evitar duplicação de disparos
+        if (currentPatternCoroutine != null)
+        {
+            StopCoroutine(currentPatternCoroutine);
+            currentPatternCoroutine = null;
+        }
+
+        // Reseta o ângulo do padrão espiral ao iniciar uma nova rajada
+        currentSpiralAngle = startAngle;
+
+        // Inicia a corrotina de tiros contínuos
         currentPatternCoroutine = StartCoroutine(FireRoutine());
     }
 
@@ -53,6 +78,11 @@ public class BulletPatternEmitter : MonoBehaviour
             StopCoroutine(currentPatternCoroutine);
             currentPatternCoroutine = null;
         }
+    }
+
+    private void OnDisable()
+    {
+        StopFiring();
     }
 
     private IEnumerator FireRoutine()
@@ -79,12 +109,13 @@ public class BulletPatternEmitter : MonoBehaviour
                     break;
             }
 
+            // Aguarda o tempo do intervalo configurado
             yield return new WaitForSeconds(fireRate);
 
         } while (loopPattern);
     }
 
-    // --- MÉTODOS DE CÁLCULO DE ÂNGULO E MATEMÁTICA DANMAKU ---
+    // --- MÉTODOS DE CÁLCULO E DISPARO DANMAKU ---
 
     private void SpawnRing(float baseAngle)
     {
@@ -103,7 +134,6 @@ public class BulletPatternEmitter : MonoBehaviour
         float startFan = -fanSpreadAngle / 2f;
         float angleStep = fanSpreadAngle / Mathf.Max(1, bulletCount - 1);
 
-        // Se houver player, dispara em direção ao player com o espalhamento em leque
         float baseAngle = 270f; // Direção para baixo por padrão
         if (playerTransform != null)
         {
@@ -131,10 +161,11 @@ public class BulletPatternEmitter : MonoBehaviour
 
     private void FireBullet(Vector2 direction)
     {
+        if (ObjectPoolManager.Instance == null) return;
+
         GameObject bulletObj = ObjectPoolManager.Instance.SpawnFromPool(bulletPoolTag, transform.position, Quaternion.identity);
         if (bulletObj != null && bulletObj.TryGetComponent<Bullet>(out Bullet bullet))
         {
-            // Garante que o GameObject esteja ativo na cena
             bullet.gameObject.SetActive(true);
             bullet.Initialize(direction, bulletSpeed);
         }
