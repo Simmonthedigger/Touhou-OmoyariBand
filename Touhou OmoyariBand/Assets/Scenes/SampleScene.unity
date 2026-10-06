@@ -1734,7 +1734,7 @@ Transform:
   m_GameObject: {fileID: 1236432018}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.12, y: -0.23, z: 0}
+  m_LocalPosition: {x: -0.02, y: 7.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1927,20 +1927,20 @@ MonoBehaviour:
   poolConfigs:
   - tag: spin
     prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
-    defaultCapacity: 50
-    maxSize: 200
+    defaultCapacity: 500
+    maxSize: 1000
   - tag: leque
     prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
-    defaultCapacity: 50
-    maxSize: 200
+    defaultCapacity: 500
+    maxSize: 1000
   - tag: BossBulletRed1
     prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
-    defaultCapacity: 50
-    maxSize: 200
+    defaultCapacity: 500
+    maxSize: 1000
   - tag: BossBulletRed
     prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
-    defaultCapacity: 50
-    maxSize: 200
+    defaultCapacity: 500
+    maxSize: 1000
 --- !u!4 &1507900651
 Transform:
   m_ObjectHideFlags: 0
