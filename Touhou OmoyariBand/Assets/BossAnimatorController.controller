@@ -7,18 +7,21 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: NextBehavior
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6225707305886664509}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
-  m_HasFixedDuration: 1
+  m_HasExitTime: 0
+  m_HasFixedDuration: 0
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
@@ -89,7 +92,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63bb92aa80d3e8d418ca484357741bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
+  musicSource: {fileID: 0}
   stateDuration: 6
+  isPhaseEnd: 0
+  phaseTriggerName: NextPhase
   shootDuringState: 1
   patternIndex: 1
   movementState: 2
@@ -129,18 +135,21 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: NextBehavior
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3334623661139288285}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
-  m_HasFixedDuration: 1
+  m_HasExitTime: 0
+  m_HasFixedDuration: 0
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
@@ -212,11 +221,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63bb92aa80d3e8d418ca484357741bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
+  musicSource: {fileID: 0}
   stateDuration: 6
+  isPhaseEnd: 0
+  phaseTriggerName: NextPhase
   shootDuringState: 1
-  patternIndex: 0
+  patternIndex: 2
   movementState: 2
-  targetPointName: 
+  targetPointName: right mid boton
 --- !u!1101 &-4613386561098246035
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -234,11 +246,11 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0.75
   m_HasExitTime: 0
-  m_HasFixedDuration: 1
+  m_HasFixedDuration: 0
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
@@ -282,10 +294,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63bb92aa80d3e8d418ca484357741bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
-  stateDuration: 12
+  musicSource: {fileID: 0}
+  stateDuration: 6
+  isPhaseEnd: 0
+  phaseTriggerName: NextPhase
   shootDuringState: 1
   patternIndex: 0
-  movementState: 2
+  movementState: 0
   targetPointName: lct direita
 --- !u!114 &-2049210164592297298
 MonoBehaviour:
@@ -299,11 +314,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63bb92aa80d3e8d418ca484357741bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
+  musicSource: {fileID: 0}
   stateDuration: 6
+  isPhaseEnd: 0
+  phaseTriggerName: NextPhase
   shootDuringState: 1
   patternIndex: 1
   movementState: 2
-  targetPointName: Lc esquerda
+  targetPointName: Lct esquerda
 --- !u!114 &-1133613473737494863
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -316,11 +334,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63bb92aa80d3e8d418ca484357741bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
+  musicSource: {fileID: 0}
   stateDuration: 6
+  isPhaseEnd: 0
+  phaseTriggerName: NextPhase
   shootDuringState: 1
-  patternIndex: 0
-  movementState: 2
-  targetPointName: 
+  patternIndex: 2
+  movementState: 1
+  targetPointName: mid left boton
 --- !u!114 &-849384712260665696
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -333,11 +354,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63bb92aa80d3e8d418ca484357741bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
+  musicSource: {fileID: 0}
   stateDuration: 6
+  isPhaseEnd: 0
+  phaseTriggerName: NextPhase
   shootDuringState: 1
-  patternIndex: 0
+  patternIndex: 2
   movementState: 3
-  targetPointName: 
+  targetPointName: Lc Meio
 --- !u!1102 &-517936708902847542
 AnimatorState:
   serializedVersion: 6
@@ -377,16 +401,16 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -517936708902847542}
-    m_Position: {x: 260, y: 130, z: 0}
+    m_Position: {x: 270, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8502412392232552007}
-    m_Position: {x: 540, y: 130, z: 0}
+    m_Position: {x: 530, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3062127607162063228}
     m_Position: {x: 790, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4007339237536591013}
-    m_Position: {x: 790, y: 240, z: 0}
+    m_Position: {x: 800, y: 230, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7319373281691480875}
     m_Position: {x: 800, y: 340, z: 0}
@@ -427,25 +451,13 @@ AnimatorController:
   m_Name: BossAnimatorController
   serializedVersion: 6
   m_AnimatorParameters:
-  - m_Name: Health
-    m_Type: 1
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: BehaviorIndex
-    m_Type: 3
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: NextPhase
+  - m_Name: NextBehavior
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: NextBehavior
+  - m_Name: NextPhase
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -472,18 +484,21 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: NextBehavior
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8449032572021571237}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
-  m_HasFixedDuration: 1
+  m_HasExitTime: 0
+  m_HasFixedDuration: 0
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
@@ -499,7 +514,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f5c7441e2f5844cacd93b3dba1e168, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossInvulnerableState
-  invincibilityDuration: 0
+  invincibilityDuration: 2
+  musicSource: {fileID: 0}
+--- !u!114 &1860943250992354678
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f5c7441e2f5844cacd93b3dba1e168, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossInvulnerableState
+  invincibilityDuration: 2
+  musicSource: {fileID: 0}
 --- !u!1102 &2049562101845217186
 AnimatorState:
   serializedVersion: 6
@@ -577,7 +607,7 @@ AnimatorStateTransition:
   m_TransitionOffset: 0
   m_ExitTime: 2.5
   m_HasExitTime: 0
-  m_HasFixedDuration: 1
+  m_HasFixedDuration: 0
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
@@ -594,7 +624,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: 8595913698173833615}
   m_StateMachineBehaviours:
-  - {fileID: 7041915146950590355}
+  - {fileID: 1860943250992354678}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -621,10 +651,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63bb92aa80d3e8d418ca484357741bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
+  musicSource: {fileID: 0}
   stateDuration: 6
-  shootDuringState: 0
+  isPhaseEnd: 0
+  phaseTriggerName: NextPhase
+  shootDuringState: 1
   patternIndex: 0
-  movementState: 2
+  movementState: 3
   targetPointName: Lc Meio
 --- !u!1102 &6924364699517151734
 AnimatorState:
@@ -654,19 +687,6 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!114 &7041915146950590355
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68f5c7441e2f5844cacd93b3dba1e168, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BossInvulnerableState
-  invincibilityDuration: 0
 --- !u!1101 &7321301218469107570
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -674,7 +694,10 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: NextBehavior
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2049562101845217186}
   m_Solo: 0
@@ -701,10 +724,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63bb92aa80d3e8d418ca484357741bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
+  musicSource: {fileID: 0}
   stateDuration: 6
+  isPhaseEnd: 0
+  phaseTriggerName: NextPhase
   shootDuringState: 1
   patternIndex: 0
-  movementState: 2
+  movementState: 1
   targetPointName: Lct esquerda
 --- !u!114 &7903757504276333151
 MonoBehaviour:
@@ -718,7 +744,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63bb92aa80d3e8d418ca484357741bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
+  musicSource: {fileID: 0}
   stateDuration: 6
+  isPhaseEnd: 0
+  phaseTriggerName: NextPhase
   shootDuringState: 1
   patternIndex: 1
   movementState: 1
@@ -744,7 +773,7 @@ AnimatorStateTransition:
   m_TransitionOffset: 0
   m_ExitTime: 5
   m_HasExitTime: 0
-  m_HasFixedDuration: 1
+  m_HasFixedDuration: 0
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
@@ -755,18 +784,21 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: NextPhase
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4775813731870992549}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 0.75
-  m_HasExitTime: 1
-  m_HasFixedDuration: 1
+  m_ExitTime: 0
+  m_HasExitTime: 0
+  m_HasFixedDuration: 0
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
@@ -787,11 +819,11 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0.75
   m_HasExitTime: 0
-  m_HasFixedDuration: 1
+  m_HasFixedDuration: 0
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
@@ -803,8 +835,8 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 4
-    m_ConditionEvent: Health
+  - m_ConditionMode: 1
+    m_ConditionEvent: NextBehavior
     m_EventTreshold: 20
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6924364699517151734}

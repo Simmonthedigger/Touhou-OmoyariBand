@@ -2,78 +2,66 @@ using UnityEngine;
 
 public class BossPatternState : StateMachineBehaviour
 {
-    [Header("Duração do Estado")]
-    [Tooltip("Tempo em segundos que o Boss ficará neste estado antes de avançar.")]
-    [SerializeField] private float stateDuration = 6.0f;
-    private float timer;
+    [Header("Música e Duração")]
+    [SerializeField] private AudioSource musicSource;
+    [Tooltip("Duração deste padrão em segundos da música.")]
+    [SerializeField] private float stateDuration = 10.0f;
+
+    private float startTimeInMusic;
     private bool hasTriggeredNext;
 
-    [Header("Ataque do Boss")]
-    [Tooltip("Marque como TRUE para atirar. Desmarque (FALSE) para o Boss apenas se mover sem atirar.")]
-    [SerializeField] private bool shootDuringState = true;
+    [Header("Tipo de Transição")]
+    [Tooltip("Marque se este for o último padrão de uma fase (Ex: final do High_Behavior3).")]
+    [SerializeField] private bool isPhaseEnd = false;
+    [SerializeField] private string phaseTriggerName = "NextPhase";
 
-    [Tooltip("Índice do PatternEmitter nos objetos filhos do Boss (0, 1, 2...). Use -1 para nenhum.")]
+    [Header("Ataque do Boss")]
+    [SerializeField] private bool shootDuringState = true;
     [SerializeField] private int patternIndex = 0;
 
     [Header("Movimentação do Boss")]
     [SerializeField] private BossMovement.MovementState movementState = BossMovement.MovementState.IdleHover;
-
-    [Header("Destino do Movimento (Opcional)")]
-    [Tooltip("Nome do GameObject Waypoint na Hierarchy. Deixe em branco se não quiser mudar de posição.")]
     [SerializeField] private string targetPointName;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        timer = 0f;
         hasTriggeredNext = false;
-
-        // Limpa Triggers antigos para evitar pular de estado precocemente
         animator.ResetTrigger("NextBehavior");
+        if (!string.IsNullOrEmpty(phaseTriggerName)) animator.ResetTrigger(phaseTriggerName);
+
+        if (musicSource == null)
+        {
+            musicSource = FindFirstObjectByType<AudioSource>();
+        }
+
+        startTimeInMusic = (musicSource != null && musicSource.isPlaying) ? musicSource.time : Time.time;
 
         BossController boss = animator.GetComponent<BossController>();
         BossMovement movement = animator.GetComponent<BossMovement>();
 
-        // --- CONTROLE DE TIRO ---
         if (boss != null)
         {
-            // Sempre desliga os tiros do estado anterior primeiro
             boss.StopAllPatterns();
-
-            // Só ativa o tiro se a caixinha 'shootDuringState' estiver marcada E o índice for válido
             if (shootDuringState && patternIndex >= 0)
             {
                 boss.ActivatePatternIndex(patternIndex);
             }
         }
 
-        // --- CONTROLE DE MOVIMENTO ---
         if (movement != null)
         {
             if (!string.IsNullOrEmpty(targetPointName))
             {
                 GameObject targetPoint = GameObject.Find(targetPointName);
-                if (targetPoint != null)
-                {
-                    movement.MoveToPosition(targetPoint.transform.position);
-                }
-                else
-                {
-                    Debug.LogWarning($"[BossPatternState] Objeto de destino '{targetPointName}' não foi encontrado!");
-                }
+                if (targetPoint != null) movement.MoveToPosition(targetPoint.transform.position);
             }
             else
             {
                 switch (movementState)
                 {
-                    case BossMovement.MovementState.IdleHover:
-                        movement.StartHoverMode();
-                        break;
-                    case BossMovement.MovementState.Circle:
-                        movement.StartCircleMode();
-                        break;
-                    case BossMovement.MovementState.Static:
-                        movement.SetState(BossMovement.MovementState.Static);
-                        break;
+                    case BossMovement.MovementState.IdleHover: movement.StartHoverMode(); break;
+                    case BossMovement.MovementState.Circle: movement.StartCircleMode(); break;
+                    case BossMovement.MovementState.Static: movement.SetState(BossMovement.MovementState.Static); break;
                 }
             }
         }
@@ -81,23 +69,30 @@ public class BossPatternState : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        timer += Time.deltaTime;
+        float currentMusicTime = (musicSource != null && musicSource.isPlaying) ? musicSource.time : Time.time;
+        float elapsedTime = currentMusicTime - startTimeInMusic;
 
-        if (timer >= stateDuration && !hasTriggeredNext)
+        if (elapsedTime >= stateDuration && !hasTriggeredNext)
         {
             hasTriggeredNext = true;
-            animator.SetTrigger("NextBehavior");
+
+            if (isPhaseEnd)
+            {
+                animator.SetTrigger(phaseTriggerName);
+            }
+            else
+            {
+                animator.SetTrigger("NextBehavior");
+            }
         }
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.ResetTrigger("NextBehavior");
+        if (!string.IsNullOrEmpty(phaseTriggerName)) animator.ResetTrigger(phaseTriggerName);
 
         BossController boss = animator.GetComponent<BossController>();
-        if (boss != null)
-        {
-            boss.StopAllPatterns();
-        }
+        if (boss != null) boss.StopAllPatterns();
     }
 }

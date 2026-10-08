@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BossController : MonoBehaviour
@@ -7,6 +8,8 @@ public class BossController : MonoBehaviour
     [SerializeField] private BossMovement bossMovement;
     [SerializeField] private BulletPatternEmitter[] patternEmitters; // Lista de padrões no Boss
 
+    private Coroutine blinkCoroutine;
+
     private void Awake()
     {
         if (bossSpriteRenderer == null) bossSpriteRenderer = GetComponent<SpriteRenderer>();
@@ -15,7 +18,7 @@ public class BossController : MonoBehaviour
             patternEmitters = GetComponentsInChildren<BulletPatternEmitter>();
     }
 
-    // --- MÉTODOS CHAMADOS PELO STAGE TIMELINE ---
+    // --- MÉTODOS CHAMADOS PELO STAGE TIMELINE / ANIMATOR ---
 
     public void SetBossSprite(Sprite newSprite)
     {
@@ -42,8 +45,6 @@ public class BossController : MonoBehaviour
         }
     }
 
-    // Adicione estes métodos ao BossController.cs
-
     public void SetMovementStateIdle()
     {
         if (bossMovement != null) bossMovement.StartHoverMode();
@@ -60,5 +61,53 @@ public class BossController : MonoBehaviour
         {
             emitter.StopFiring();
         }
+    }
+
+    // --- CONTROLE DE PISCAR (INVULNERABILIDADE) ---
+
+    public void StartInvulnerableBlink(float duration)
+    {
+        if (blinkCoroutine != null) StopCoroutine(blinkCoroutine);
+        blinkCoroutine = StartCoroutine(BlinkRoutine(duration));
+    }
+
+    public void StopInvulnerableBlink()
+    {
+        if (blinkCoroutine != null)
+        {
+            StopCoroutine(blinkCoroutine);
+            blinkCoroutine = null;
+        }
+
+        // Restaura a cor e opacidade originais do Sprite
+        if (bossSpriteRenderer != null)
+        {
+            Color c = bossSpriteRenderer.color;
+            c.a = 1f;
+            bossSpriteRenderer.color = c;
+        }
+    }
+
+    private IEnumerator BlinkRoutine(float duration)
+    {
+        if (bossSpriteRenderer == null) yield break;
+
+        float elapsedTime = 0f;
+        float blinkInterval = 0.1f; // Intervalo entre visível/transparente
+
+        while (elapsedTime < duration)
+        {
+            Color c = bossSpriteRenderer.color;
+            c.a = (c.a >= 0.9f) ? 0.2f : 1f; // Alterna a transparência
+            bossSpriteRenderer.color = c;
+
+            yield return new WaitForSeconds(blinkInterval);
+            elapsedTime += blinkInterval;
+        }
+
+        // Garante que termina visível
+        Color finalColor = bossSpriteRenderer.color;
+        finalColor.a = 1f;
+        bossSpriteRenderer.color = finalColor;
     }
 }
