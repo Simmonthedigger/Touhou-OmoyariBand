@@ -5,7 +5,7 @@ public class PlayerBullet : MonoBehaviour
 {
     [Header("Movimento Teleguiado")]
     [SerializeField] private float speed = 16f;
-    [SerializeField] private float rotateSpeed = 500f; // Ajusta a curva se o Boss se mover no ar
+    [SerializeField] private float rotateSpeed = 500f; // Velocidade de curva
     [SerializeField] private float lifeTime = 4f;
 
     private ObjectPool<GameObject> pool;
@@ -33,13 +33,12 @@ public class PlayerBullet : MonoBehaviour
         {
             targetBoss = bossObj.transform;
 
-            // --- APONTAR IMEDIATAMENTE PARA O BOSS AO NASCER ---
+            // Aponta a bala imediatamente na direção do Boss ao nascer
             Vector2 direction = (Vector2)targetBoss.position - (Vector2)transform.position;
 
             if (direction != Vector2.zero)
             {
-                // Calcula o ângulo em graus para girar a bala na direção do Boss
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f; // -90 para alinhar o topo (Up) da bala
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
                 transform.rotation = Quaternion.Euler(0, 0, angle);
             }
         }
@@ -47,7 +46,7 @@ public class PlayerBullet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Se o Boss estiver ativo e se movendo, continua corrigindo a trajetória em tempo real
+        // Se o Boss estiver ativo na cena, ajusta a trajetória via física
         if (targetBoss != null && targetBoss.gameObject.activeInHierarchy)
         {
             Vector2 direction = (Vector2)targetBoss.position - rb.position;
@@ -59,14 +58,15 @@ public class PlayerBullet : MonoBehaviour
         }
         else
         {
-            // Se não houver Boss, segue em frente na direção em que nasceu
+            // Se não houver Boss ativo, segue reto na direção atual
+            rb.angularVelocity = 0f;
             rb.linearVelocity = transform.up * speed;
         }
     }
 
     private void Update()
     {
-        // Devolve para a pool se expirar o tempo sem acertar nada
+        // Devolve para a pool se expirar o tempo
         timer += Time.deltaTime;
         if (timer >= lifeTime)
         {
@@ -76,16 +76,14 @@ public class PlayerBullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Verifica se colidiu com o Boss (ou qualquer collider filho do Boss)
+        // Colisão com o Boss ou colliders em objetos filhos do Boss
         if (collision.CompareTag("Boss") || (collision.transform.parent != null && collision.transform.parent.CompareTag("Boss")))
         {
-            // Adiciona pontos no ScoreManager
             if (ScoreManager.Instance != null)
             {
                 ScoreManager.Instance.AddBossHitPoints();
             }
 
-            // Recolhe a bala de volta para a Pool
             ReturnToPool();
         }
     }

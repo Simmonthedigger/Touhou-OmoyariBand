@@ -1637,13 +1637,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f83ce0a31ef66844b9b1f7a9f626e1af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  livesText: {fileID: 2012532816}
-  gameOverPanel: {fileID: 35761353}
-  victoryPanel: {fileID: 0}
-  victoryScoreText: {fileID: 0}
-  gameOverScoreText: {fileID: 0}
-  musicSource: {fileID: 0}
-  boss: {fileID: 0}
+  musicSource: {fileID: 8893855}
+  boss: {fileID: 1236432023}
+  bootSceneName: Boot
 --- !u!4 &737363117
 Transform:
   m_ObjectHideFlags: 0

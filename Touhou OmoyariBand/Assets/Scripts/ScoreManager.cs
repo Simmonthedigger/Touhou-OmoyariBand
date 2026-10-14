@@ -1,13 +1,8 @@
 using UnityEngine;
-using TMPro; // Use 'using UnityEngine.UI;' se estiver usando o Text legado do Unity
 
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
-
-    [Header("UI de Pontuação")]
-    [Tooltip("Componente de texto na tela para exibir a pontuação.")]
-    [SerializeField] private TextMeshProUGUI scoreText; // Altere para 'Text' se não usar TextMeshPro
 
     [Header("Configuração de Pontos (Inspector)")]
     [Tooltip("Quantidade de pontos ganhos por segundo decorrido.")]
@@ -26,7 +21,6 @@ public class ScoreManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton simples para fácil acesso
         if (Instance == null)
         {
             Instance = this;
@@ -84,9 +78,9 @@ public class ScoreManager : MonoBehaviour
 
     private void UpdateScoreUI()
     {
-        if (scoreText != null)
+        if (HUDController.Instance != null)
         {
-            scoreText.text = $"Pontos: {GetCurrentScore()}";
+            HUDController.Instance.UpdateScore(GetCurrentScore());
         }
     }
 }
