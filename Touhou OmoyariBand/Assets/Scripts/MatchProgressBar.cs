@@ -16,6 +16,7 @@ public class MatchProgressBar : MonoBehaviour
     [SerializeField] private Color phase3Color = Color.red;
 
     private float totalMusicDuration;
+    private bool hasTriggeredVictory = false;
 
     public float CurrentProgressNormalized { get; private set; } // Retorna de 0.0 a 1.0
 
@@ -58,6 +59,19 @@ public class MatchProgressBar : MonoBehaviour
             else
             {
                 fillImage.color = phase1Color;
+            }
+        }
+
+        // DISPARA A VITÓRIA E CONGELA O JOGO QUANDO A MÚSICA CHEGA AO FIM (100% DE PROGRESSO)
+        if (CurrentProgressNormalized >= 0.99f || (!musicSource.isPlaying && musicSource.time > 0f))
+        {
+            if (!hasTriggeredVictory)
+            {
+                hasTriggeredVictory = true;
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.Victory();
+                }
             }
         }
     }
