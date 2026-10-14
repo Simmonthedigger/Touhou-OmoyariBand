@@ -29,8 +29,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if (musicSource == null) musicSource = FindFirstObjectByType<AudioSource>();
-        if (boss == null) boss = FindFirstObjectByType<BossController>();
+        if (musicSource == null) musicSource = FindAnyObjectByType<AudioSource>();
+        if (boss == null) boss = FindAnyObjectByType<BossController>();
     }
 
     public void UpdateLivesUI(int lives)

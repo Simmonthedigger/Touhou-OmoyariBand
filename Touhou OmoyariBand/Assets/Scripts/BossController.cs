@@ -6,9 +6,15 @@ public class BossController : MonoBehaviour
     [Header("Componentes do Boss")]
     [SerializeField] private SpriteRenderer bossSpriteRenderer;
     [SerializeField] private BossMovement bossMovement;
-    [SerializeField] private BulletPatternEmitter[] patternEmitters; // Lista de padrões no Boss
+    [SerializeField] private BulletPatternEmitter[] patternEmitters;
+
+    [Header("Waypoints Por Fase")]
+    [SerializeField] private Transform[] phase1Waypoints;
+    [SerializeField] private Transform[] phase2Waypoints;
+    [SerializeField] private Transform[] phase3Waypoints;
 
     private Coroutine blinkCoroutine;
+    private int lastPatternIndex = -1; // Guarda o último padrão usado para não repetir
 
     private void Awake()
     {
@@ -18,21 +24,56 @@ public class BossController : MonoBehaviour
             patternEmitters = GetComponentsInChildren<BulletPatternEmitter>();
     }
 
-    // --- MÉTODOS CHAMADOS PELO STAGE TIMELINE / ANIMATOR ---
-
-    public void SetBossSprite(Sprite newSprite)
+    /// <summary>
+    /// Sorteia um Waypoint e um Padrão de Tiro SEM REPETIR o padrão anterior.
+    /// </summary>
+    public void ExecuteRandomBehavior(int phaseIndex, int[] allowedPatternIndices)
     {
-        if (bossSpriteRenderer != null && newSprite != null)
+        StopAllPatterns();
+
+        // 1. Sorteia e move para um Waypoint da fase
+        Transform[] currentWaypoints = GetWaypointsForPhase(phaseIndex);
+        if (currentWaypoints != null && currentWaypoints.Length > 0 && bossMovement != null)
         {
-            bossSpriteRenderer.sprite = newSprite;
+            int randomWpIndex = Random.Range(0, currentWaypoints.Length);
+            if (currentWaypoints[randomWpIndex] != null)
+            {
+                bossMovement.MoveToPosition(currentWaypoints[randomWpIndex].position);
+            }
+        }
+
+        // 2. Sorteia um padrão SEM REPETIR o anterior
+        if (allowedPatternIndices != null && allowedPatternIndices.Length > 0)
+        {
+            int selectedPattern = GetRandomNonRepeatingPattern(allowedPatternIndices);
+            lastPatternIndex = selectedPattern; // Guarda o novo escolhido
+            ActivatePatternIndex(selectedPattern);
         }
     }
 
-    public void MoveToPoint(Transform targetTransform)
+    private int GetRandomNonRepeatingPattern(int[] allowedIndices)
     {
-        if (targetTransform != null && bossMovement != null)
+        // Se houver apenas 1 padrão configurado para a fase, não há como alternar
+        if (allowedIndices.Length <= 1) return allowedIndices[0];
+
+        int newPattern;
+        do
         {
-            bossMovement.MoveToPosition(targetTransform.position);
+            newPattern = allowedIndices[Random.Range(0, allowedIndices.Length)];
+        }
+        while (newPattern == lastPatternIndex); // Repete o sorteio se for igual ao último disparado
+
+        return newPattern;
+    }
+
+    private Transform[] GetWaypointsForPhase(int phaseIndex)
+    {
+        switch (phaseIndex)
+        {
+            case 1: return phase1Waypoints;
+            case 2: return phase2Waypoints;
+            case 3: return phase3Waypoints;
+            default: return phase1Waypoints;
         }
     }
 
@@ -45,25 +86,15 @@ public class BossController : MonoBehaviour
         }
     }
 
-    public void SetMovementStateIdle()
-    {
-        if (bossMovement != null) bossMovement.StartHoverMode();
-    }
-
-    public void SetMovementStateCircle()
-    {
-        if (bossMovement != null) bossMovement.StartCircleMode();
-    }
-
     public void StopAllPatterns()
     {
         foreach (var emitter in patternEmitters)
         {
-            emitter.StopFiring();
+            if (emitter != null) emitter.StopFiring();
         }
     }
 
-    // --- CONTROLE DE PISCAR (INVULNERABILIDADE) ---
+    // --- CONTROLE DE INVULNERABILIDADE (PISCAR) ---
 
     public void StartInvulnerableBlink(float duration)
     {
@@ -79,7 +110,6 @@ public class BossController : MonoBehaviour
             blinkCoroutine = null;
         }
 
-        // Restaura a cor e opacidade originais do Sprite
         if (bossSpriteRenderer != null)
         {
             Color c = bossSpriteRenderer.color;
@@ -93,19 +123,18 @@ public class BossController : MonoBehaviour
         if (bossSpriteRenderer == null) yield break;
 
         float elapsedTime = 0f;
-        float blinkInterval = 0.1f; // Intervalo entre visível/transparente
+        float blinkInterval = 0.1f;
 
         while (elapsedTime < duration)
         {
             Color c = bossSpriteRenderer.color;
-            c.a = (c.a >= 0.9f) ? 0.2f : 1f; // Alterna a transparência
+            c.a = (c.a >= 0.9f) ? 0.2f : 1f;
             bossSpriteRenderer.color = c;
 
             yield return new WaitForSeconds(blinkInterval);
             elapsedTime += blinkInterval;
         }
 
-        // Garante que termina visível
         Color finalColor = bossSpriteRenderer.color;
         finalColor.a = 1f;
         bossSpriteRenderer.color = finalColor;

@@ -2176,7 +2176,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!58 &1079749313
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2377,6 +2377,17 @@ MonoBehaviour:
   - {fileID: 267527550}
   - {fileID: 1653980886}
   - {fileID: 1793070226}
+  phase1Waypoints:
+  - {fileID: 1921770396}
+  - {fileID: 1151673832}
+  - {fileID: 1982847571}
+  phase2Waypoints:
+  - {fileID: 379574505}
+  - {fileID: 382638742}
+  phase3Waypoints:
+  - {fileID: 1825818179}
+  - {fileID: 839078252}
+  - {fileID: 1704769974}
 --- !u!114 &1236432024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3078,9 +3089,7 @@ MonoBehaviour:
   progressSlider: {fileID: 1917388172}
   fillImage: {fileID: 267376560}
   phase1Color: {r: 0, g: 1, b: 0, a: 1}
-  phase2StartSecond: 20
   phase2Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  phase3StartSecond: 60
   phase3Color: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &1921770395
 GameObject:
@@ -3142,7 +3151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea91fff457a8b84eb786d0748a86cb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
-  scoreText: {fileID: 512899415}
   pointsPerSecond: 10
   pointsPerBossHit: 50
   pointsLostOnDamage: 100

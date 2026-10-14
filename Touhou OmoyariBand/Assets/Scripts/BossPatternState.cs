@@ -2,87 +2,66 @@ using UnityEngine;
 
 public class BossPatternState : StateMachineBehaviour
 {
-    [Header("Música e Duração")]
-    [SerializeField] private AudioSource musicSource;
-    [Tooltip("Duração deste padrão em segundos da música.")]
-    [SerializeField] private float stateDuration = 10.0f;
+    [Header("Configuração de Fase")]
+    [Tooltip("Fase do Boss (1, 2 ou 3).")]
+    [Range(1, 3)]
+    [SerializeField] private int phaseIndex = 1;
 
-    private float startTimeInMusic;
-    private bool hasTriggeredNext;
+    [Tooltip("Índices dos Padrões de Tiro permitidos para esta fase.")]
+    [SerializeField] private int[] allowedPatternIndices = new int[] { 0, 1 };
 
-    [Header("Tipo de Transição")]
-    [Tooltip("Marque se este for o último padrão de uma fase (Ex: final do High_Behavior3).")]
-    [SerializeField] private bool isPhaseEnd = false;
-    [SerializeField] private string phaseTriggerName = "NextPhase";
+    [Header("Tempo do Ciclo")]
+    [Tooltip("Tempo em segundos antes de sortear o próximo comportamento/waypoint.")]
+    [SerializeField] private float cycleDuration = 4.0f;
 
-    [Header("Ataque do Boss")]
-    [SerializeField] private bool shootDuringState = true;
-    [SerializeField] private int patternIndex = 0;
-
-    [Header("Movimentação do Boss")]
-    [SerializeField] private BossMovement.MovementState movementState = BossMovement.MovementState.IdleHover;
-    [SerializeField] private string targetPointName;
+    private float timer;
+    private MatchProgressBar progressBar;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        hasTriggeredNext = false;
+        timer = 0f;
         animator.ResetTrigger("NextBehavior");
-        if (!string.IsNullOrEmpty(phaseTriggerName)) animator.ResetTrigger(phaseTriggerName);
+        animator.ResetTrigger("NextPhase");
 
-        if (musicSource == null)
+        if (progressBar == null)
         {
-            musicSource = FindFirstObjectByType<AudioSource>();
+            progressBar = FindAnyObjectByType<MatchProgressBar>();
         }
-
-        startTimeInMusic = (musicSource != null && musicSource.isPlaying) ? musicSource.time : Time.time;
 
         BossController boss = animator.GetComponent<BossController>();
-        BossMovement movement = animator.GetComponent<BossMovement>();
-
         if (boss != null)
         {
-            boss.StopAllPatterns();
-            if (shootDuringState && patternIndex >= 0)
-            {
-                boss.ActivatePatternIndex(patternIndex);
-            }
-        }
-
-        if (movement != null)
-        {
-            if (!string.IsNullOrEmpty(targetPointName))
-            {
-                GameObject targetPoint = GameObject.Find(targetPointName);
-                if (targetPoint != null) movement.MoveToPosition(targetPoint.transform.position);
-            }
-            else
-            {
-                switch (movementState)
-                {
-                    case BossMovement.MovementState.IdleHover: movement.StartHoverMode(); break;
-                    case BossMovement.MovementState.Circle: movement.StartCircleMode(); break;
-                    case BossMovement.MovementState.Static: movement.SetState(BossMovement.MovementState.Static); break;
-                }
-            }
+            boss.ExecuteRandomBehavior(phaseIndex, allowedPatternIndices);
         }
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        float currentMusicTime = (musicSource != null && musicSource.isPlaying) ? musicSource.time : Time.time;
-        float elapsedTime = currentMusicTime - startTimeInMusic;
+        float currentProgress = (progressBar != null) ? progressBar.CurrentProgressNormalized : 0f;
 
-        if (elapsedTime >= stateDuration && !hasTriggeredNext)
+        // 1. Verifica se deve mudar para a próxima fase com base na porcentagem
+        if (phaseIndex == 1 && currentProgress >= 0.33f)
         {
-            hasTriggeredNext = true;
+            animator.SetTrigger("NextPhase");
+            return;
+        }
+        else if (phaseIndex == 2 && currentProgress >= 0.66f)
+        {
+            animator.SetTrigger("NextPhase");
+            return;
+        }
 
-            if (isPhaseEnd)
+        // 2. Controla o ciclo de alternância dentro da mesma fase
+        timer += Time.deltaTime;
+        if (timer >= cycleDuration)
+        {
+            timer = 0f;
+
+            // Re-executa um sorteio de Waypoint e Padrão na mesma fase
+            BossController boss = animator.GetComponent<BossController>();
+            if (boss != null)
             {
-                animator.SetTrigger(phaseTriggerName);
-            }
-            else
-            {
-                animator.SetTrigger("NextBehavior");
+                boss.ExecuteRandomBehavior(phaseIndex, allowedPatternIndices);
             }
         }
     }
@@ -90,9 +69,12 @@ public class BossPatternState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.ResetTrigger("NextBehavior");
-        if (!string.IsNullOrEmpty(phaseTriggerName)) animator.ResetTrigger(phaseTriggerName);
+        animator.ResetTrigger("NextPhase");
 
         BossController boss = animator.GetComponent<BossController>();
-        if (boss != null) boss.StopAllPatterns();
+        if (boss != null)
+        {
+            boss.StopAllPatterns();
+        }
     }
 }

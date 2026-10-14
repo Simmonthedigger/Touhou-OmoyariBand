@@ -23,7 +23,7 @@ public class BossInvulnerableState : StateMachineBehaviour
         // Procura o AudioSource caso não tenha sido atribuído no Inspector
         if (musicSource == null)
         {
-            musicSource = FindFirstObjectByType<AudioSource>();
+            musicSource = FindAnyObjectByType<AudioSource>();
         }
 
         // Guarda o tempo inicial
