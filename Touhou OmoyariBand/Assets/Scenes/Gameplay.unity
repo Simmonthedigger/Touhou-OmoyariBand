@@ -2298,6 +2298,7 @@ MonoBehaviour:
   - {fileID: 267527550}
   - {fileID: 1653980886}
   - {fileID: 1793070226}
+  - {fileID: 1044339547}
   phase1Waypoints:
   - {fileID: 1921770396}
   - {fileID: 1151673832}

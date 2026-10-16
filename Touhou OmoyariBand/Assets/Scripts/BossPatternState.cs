@@ -3,19 +3,14 @@ using UnityEngine;
 public class BossPatternState : StateMachineBehaviour
 {
     [Header("Configuração da Fase")]
-    [Tooltip("Fase do Boss (1, 2 ou 3).")]
     [Range(1, 3)]
     [SerializeField] private int phaseIndex = 1;
 
-    [Tooltip("Índices dos Padrões de Tiro permitidos para este comportamento específico.")]
-    [SerializeField] private int[] allowedPatternIndices = new int[] { 0, 1 };
+    [Header("Ataque e Duração")]
+    [SerializeField] private int patternIndex = 0;
 
-    [Header("Duração e Transições")]
-    [Tooltip("Tempo em segundos que o Boss permanece neste nó de comportamento antes de avançar.")]
+    [Tooltip("Tempo em segundos que o Boss FICA ATIRANDO antes de trocar de comportamento.")]
     [SerializeField] private float stateDuration = 4.0f;
-
-    [Tooltip("Marque APENAS no último nó de cada fase (ex: High_Behavior3 e Medium_Behavior3).")]
-    [SerializeField] private bool isPhaseEnd = false;
 
     private float timer;
     private MatchProgressBar progressBar;
@@ -27,18 +22,22 @@ public class BossPatternState : StateMachineBehaviour
         hasTriggeredNext = false;
 
         animator.ResetTrigger("NextBehavior");
-        animator.ResetTrigger("NextPhase");
+        animator.ResetTrigger("GoToMedium");
+        animator.ResetTrigger("GoToLow");
 
         if (progressBar == null)
         {
             progressBar = FindAnyObjectByType<MatchProgressBar>();
         }
 
-        // Sorteia o waypoint da fase e dispara um padrão de tiro permitido para este nó
+        // Ativa o movimento e inicia o padrão de tiros contínuo
         BossController boss = animator.GetComponent<BossController>();
         if (boss != null)
         {
-            boss.ExecuteRandomBehavior(phaseIndex, allowedPatternIndices);
+            boss.ActivatePatternIndex(patternIndex);
+
+            int[] currentPattern = new int[] { patternIndex };
+            boss.ExecuteRandomBehavior(phaseIndex, currentPattern);
         }
     }
 
@@ -48,43 +47,48 @@ public class BossPatternState : StateMachineBehaviour
 
         float currentProgress = (progressBar != null) ? progressBar.CurrentProgressNormalized : 0f;
 
-        // 1. MUDANÇA DE FASE (Se for o nó final da fase ou se a porcentagem já atingiu o limite)
-        if (phaseIndex == 1 && currentProgress >= 0.33f && isPhaseEnd)
+        // 1. TROCA DE FASE (Se atingiu 33% ou 66% da música)
+        if (phaseIndex == 1 && currentProgress >= 0.33f)
         {
             hasTriggeredNext = true;
-            animator.SetTrigger("NextPhase");
+            TriggerPhaseTransition(animator, "GoToMedium");
             return;
         }
-        else if (phaseIndex == 2 && currentProgress >= 0.66f && isPhaseEnd)
+        else if (phaseIndex == 2 && currentProgress >= 0.66f)
         {
             hasTriggeredNext = true;
-            animator.SetTrigger("NextPhase");
+            TriggerPhaseTransition(animator, "GoToLow");
             return;
         }
 
-        // 2. TROCA DE COMPORTAMENTO DENTRO DA MESMA FASE
+        // 2. TEMPO DO BEHAVIOR (Mantém atirando até completar a duração total)
         timer += Time.deltaTime;
         if (timer >= stateDuration)
         {
             hasTriggeredNext = true;
-
-            // Se for o último nó da fase, mas ainda não deu o tempo percentual, faz um loop na fase
-            if (isPhaseEnd)
-            {
-                animator.SetTrigger("NextBehavior");
-            }
-            else
-            {
-                animator.SetTrigger("NextBehavior");
-            }
+            animator.SetTrigger("NextBehavior");
         }
+    }
+
+    private void TriggerPhaseTransition(Animator animator, string triggerName)
+    {
+        BossController boss = animator.GetComponent<BossController>();
+        if (boss != null)
+        {
+            boss.StopAllPatterns();
+            boss.StartInvulnerableBlink(2.0f);
+        }
+
+        animator.SetTrigger(triggerName);
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.ResetTrigger("NextBehavior");
-        animator.ResetTrigger("NextPhase");
+        animator.ResetTrigger("GoToMedium");
+        animator.ResetTrigger("GoToLow");
 
+        // Desliga os tiros apenas no momento da troca de estado
         BossController boss = animator.GetComponent<BossController>();
         if (boss != null)
         {
