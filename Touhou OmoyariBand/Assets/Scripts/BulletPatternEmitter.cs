@@ -5,8 +5,9 @@ public class BulletPatternEmitter : MonoBehaviour
 {
     public enum PatternType { Ring, Spiral, Fan, DirectToPlayer }
 
-    [Header("Configurações do Pool")]
+    [Header("Configurações do Pool e Prefab")]
     [SerializeField] private string bulletPoolTag = "BossBulletRed";
+    [SerializeField] private GameObject fallbackBulletPrefab;
 
     [Header("Tipo de Ataque")]
     [SerializeField] private PatternType patternType = PatternType.Ring;
@@ -14,18 +15,15 @@ public class BulletPatternEmitter : MonoBehaviour
     [Header("Parâmetros do Padrão")]
     [SerializeField] private int bulletCount = 16;             // Quantidade de tiros por onda
     [SerializeField] private float bulletSpeed = 5f;            // Velocidade dos tiros
-    [SerializeField] private float fireRate = 0.15f;           // Tempo em segundos entre disparos
+    [SerializeField] private float fireRate = 0.2f;            // Intervalo entre disparos contínuos
     [SerializeField] private float startAngle = 0f;             // Ângulo inicial
     [SerializeField] private float angleOffsetPerShot = 10f;    // Rotação incremental (Espiral)
     [SerializeField] private float fanSpreadAngle = 60f;        // Abertura do leque (Fan)
 
-    [Header("Controle de Rajada")]
-    [SerializeField] private bool autoStart = false;
-    [SerializeField] private bool loopPattern = true;
-
     private Transform playerTransform;
     private Coroutine currentPatternCoroutine;
     private float currentSpiralAngle;
+    private bool isFiring = false;
 
     private void Awake()
     {
@@ -36,11 +34,7 @@ public class BulletPatternEmitter : MonoBehaviour
     {
         FindPlayer();
         currentSpiralAngle = startAngle;
-
-        if (autoStart)
-        {
-            StartFiring();
-        }
+        StartFiring(); // Inicia o disparo automaticamente assim que ativado pelo BossController
     }
 
     private void FindPlayer()
@@ -54,25 +48,21 @@ public class BulletPatternEmitter : MonoBehaviour
 
     public void StartFiring()
     {
-        // Garante a busca do Player caso ele tenha renascido
         FindPlayer();
 
-        // Limpa qualquer rotina anterior para evitar duplicação de disparos
         if (currentPatternCoroutine != null)
         {
             StopCoroutine(currentPatternCoroutine);
-            currentPatternCoroutine = null;
         }
 
-        // Reseta o ângulo do padrão espiral ao iniciar uma nova rajada
+        isFiring = true;
         currentSpiralAngle = startAngle;
-
-        // Inicia a corrotina de tiros contínuos
         currentPatternCoroutine = StartCoroutine(FireRoutine());
     }
 
     public void StopFiring()
     {
+        isFiring = false;
         if (currentPatternCoroutine != null)
         {
             StopCoroutine(currentPatternCoroutine);
@@ -87,7 +77,8 @@ public class BulletPatternEmitter : MonoBehaviour
 
     private IEnumerator FireRoutine()
     {
-        do
+        // Roda continuamente enquanto a flag isFiring for verdadeira
+        while (isFiring)
         {
             switch (patternType)
             {
@@ -109,17 +100,14 @@ public class BulletPatternEmitter : MonoBehaviour
                     break;
             }
 
-            // Aguarda o tempo do intervalo configurado
+            // Aguarda o intervalo antes de disparar a próxima onda contínua
             yield return new WaitForSeconds(fireRate);
-
-        } while (loopPattern);
+        }
     }
-
-    // --- MÉTODOS DE CÁLCULO E DISPARO DANMAKU ---
 
     private void SpawnRing(float baseAngle)
     {
-        float angleStep = 360f / bulletCount;
+        float angleStep = 360f / Mathf.Max(1, bulletCount);
 
         for (int i = 0; i < bulletCount; i++)
         {
@@ -134,7 +122,7 @@ public class BulletPatternEmitter : MonoBehaviour
         float startFan = -fanSpreadAngle / 2f;
         float angleStep = fanSpreadAngle / Mathf.Max(1, bulletCount - 1);
 
-        float baseAngle = 270f; // Direção para baixo por padrão
+        float baseAngle = 270f;
         if (playerTransform != null)
         {
             Vector2 toPlayer = (playerTransform.position - transform.position).normalized;
@@ -161,9 +149,18 @@ public class BulletPatternEmitter : MonoBehaviour
 
     private void FireBullet(Vector2 direction)
     {
-        if (ObjectPoolManager.Instance == null) return;
+        GameObject bulletObj = null;
 
-        GameObject bulletObj = ObjectPoolManager.Instance.SpawnFromPool(bulletPoolTag, transform.position, Quaternion.identity);
+        if (ObjectPoolManager.Instance != null)
+        {
+            bulletObj = ObjectPoolManager.Instance.SpawnFromPool(bulletPoolTag, transform.position, Quaternion.identity);
+        }
+
+        if (bulletObj == null && fallbackBulletPrefab != null)
+        {
+            bulletObj = Instantiate(fallbackBulletPrefab, transform.position, Quaternion.identity);
+        }
+
         if (bulletObj != null && bulletObj.TryGetComponent<Bullet>(out Bullet bullet))
         {
             bullet.gameObject.SetActive(true);

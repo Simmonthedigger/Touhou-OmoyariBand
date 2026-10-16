@@ -14,24 +14,25 @@ public class BossController : MonoBehaviour
     [SerializeField] private Transform[] phase3Waypoints;
 
     private Coroutine blinkCoroutine;
-    private int lastPatternIndex = -1; // Guarda o último padrão usado para não repetir
+
+    /// <summary>
+    /// True enquanto o Boss está piscando (invulnerável) na troca de fase.
+    /// </summary>
+    public bool IsInvulnerable => blinkCoroutine != null;
 
     private void Awake()
     {
         if (bossSpriteRenderer == null) bossSpriteRenderer = GetComponent<SpriteRenderer>();
         if (bossMovement == null) bossMovement = GetComponent<BossMovement>();
         if (patternEmitters == null || patternEmitters.Length == 0)
-            patternEmitters = GetComponentsInChildren<BulletPatternEmitter>();
+            patternEmitters = GetComponentsInChildren<BulletPatternEmitter>(true);
     }
 
     /// <summary>
-    /// Sorteia um Waypoint e um Padrão de Tiro SEM REPETIR o padrão anterior.
+    /// Move o Boss para um waypoint aleatório da fase.
     /// </summary>
-    public void ExecuteRandomBehavior(int phaseIndex, int[] allowedPatternIndices)
+    public void MoveBossForPhase(int phaseIndex)
     {
-        StopAllPatterns();
-
-        // 1. Sorteia e move para um Waypoint da fase
         Transform[] currentWaypoints = GetWaypointsForPhase(phaseIndex);
         if (currentWaypoints != null && currentWaypoints.Length > 0 && bossMovement != null)
         {
@@ -41,29 +42,51 @@ public class BossController : MonoBehaviour
                 bossMovement.MoveToPosition(currentWaypoints[randomWpIndex].position);
             }
         }
+    }
 
-        // 2. Sorteia um padrão SEM REPETIR o anterior
-        if (allowedPatternIndices != null && allowedPatternIndices.Length > 0)
+    /// <summary>
+    /// Ativa APENAS o emissor do índice informado e desliga os demais.
+    /// </summary>
+    public void ActivatePatternIndex(int index)
+    {
+        if (patternEmitters == null) return;
+
+        for (int i = 0; i < patternEmitters.Length; i++)
         {
-            int selectedPattern = GetRandomNonRepeatingPattern(allowedPatternIndices);
-            lastPatternIndex = selectedPattern; // Guarda o novo escolhido
-            ActivatePatternIndex(selectedPattern);
+            if (patternEmitters[i] == null) continue;
+
+            if (i == index)
+            {
+                // Se já estava ativo, reinicia explicitamente; se estava inativo,
+                // o OnEnable do emissor já chama StartFiring().
+                if (patternEmitters[i].gameObject.activeSelf)
+                {
+                    patternEmitters[i].StartFiring();
+                }
+                else
+                {
+                    patternEmitters[i].gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                patternEmitters[i].StopFiring();
+                patternEmitters[i].gameObject.SetActive(false);
+            }
         }
     }
 
-    private int GetRandomNonRepeatingPattern(int[] allowedIndices)
+    public void StopAllPatterns()
     {
-        // Se houver apenas 1 padrão configurado para a fase, não há como alternar
-        if (allowedIndices.Length <= 1) return allowedIndices[0];
+        if (patternEmitters == null) return;
 
-        int newPattern;
-        do
+        foreach (var emitter in patternEmitters)
         {
-            newPattern = allowedIndices[Random.Range(0, allowedIndices.Length)];
+            if (emitter != null)
+            {
+                emitter.StopFiring();
+            }
         }
-        while (newPattern == lastPatternIndex); // Repete o sorteio se for igual ao último disparado
-
-        return newPattern;
     }
 
     private Transform[] GetWaypointsForPhase(int phaseIndex)
@@ -77,27 +100,19 @@ public class BossController : MonoBehaviour
         }
     }
 
-    public void ActivatePatternIndex(int index)
-    {
-        StopAllPatterns();
-        if (index >= 0 && index < patternEmitters.Length)
-        {
-            patternEmitters[index].StartFiring();
-        }
-    }
-
-    public void StopAllPatterns()
-    {
-        foreach (var emitter in patternEmitters)
-        {
-            if (emitter != null) emitter.StopFiring();
-        }
-    }
-
     // --- CONTROLE DE INVULNERABILIDADE (PISCAR) ---
 
     public void StartInvulnerableBlink(float duration)
     {
+        // Para os tiros
+        StopAllPatterns();
+
+        // Para o movimento: manda o boss "ir" para a própria posição atual
+        if (bossMovement != null)
+        {
+            bossMovement.MoveToPosition(transform.position);
+        }
+
         if (blinkCoroutine != null) StopCoroutine(blinkCoroutine);
         blinkCoroutine = StartCoroutine(BlinkRoutine(duration));
     }
@@ -120,7 +135,11 @@ public class BossController : MonoBehaviour
 
     private IEnumerator BlinkRoutine(float duration)
     {
-        if (bossSpriteRenderer == null) yield break;
+        if (bossSpriteRenderer == null)
+        {
+            blinkCoroutine = null;
+            yield break;
+        }
 
         float elapsedTime = 0f;
         float blinkInterval = 0.1f;
@@ -138,5 +157,7 @@ public class BossController : MonoBehaviour
         Color finalColor = bossSpriteRenderer.color;
         finalColor.a = 1f;
         bossSpriteRenderer.color = finalColor;
+
+        blinkCoroutine = null; // invulnerabilidade acabou
     }
 }
