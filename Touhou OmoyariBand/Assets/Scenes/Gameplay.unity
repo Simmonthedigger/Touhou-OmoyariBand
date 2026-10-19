@@ -386,7 +386,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 8058694223230806719, guid: 052bc88b213192341b6ce2168867ccc1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -406,8 +406,8 @@ Transform:
   m_GameObject: {fileID: 30542079}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.06, y: -3.12, z: 0}
-  m_LocalScale: {x: 0.56647545, y: 1.0999916, z: 1}
+  m_LocalPosition: {x: -0.23, y: -3.87, z: 0}
+  m_LocalScale: {x: 0.1996427, y: 0.20611583, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1329823688}
@@ -442,7 +442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc1b423c5fde5654cb2b5d2aa8e65799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooter
-  bulletPrefab: {fileID: 4242587310165923391, guid: 0c597cb219439d945936a1cb01c7ea88, type: 3}
+  bulletPrefab: {fileID: 8046871150932942477, guid: 3db7dbe4c4aed6845bc0eb86f999486b, type: 3}
   firePoint: {fileID: 444914137}
   fireRate: 0.25
   defaultCapacity: 20
@@ -662,6 +662,112 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 61347619}
   m_CullTransparentMesh: 1
+--- !u!1 &66590768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 66590770}
+  - component: {fileID: 66590769}
+  m_Layer: 0
+  m_Name: tiro
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &66590769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66590768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b29421b74bae2549b5877152c8f796b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
+  bulletPoolTag: BossBulletRed
+  fallbackBulletPrefab: {fileID: 0}
+  patternType: 3
+  bulletCount: 16
+  bulletSpeed: 5
+  fireRate: 0.3
+  startAngle: 0
+  angleOffsetPerShot: 10
+  fanSpreadAngle: 60
+--- !u!4 &66590770
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66590768}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1236432021}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &250724851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 250724853}
+  - component: {fileID: 250724852}
+  m_Layer: 0
+  m_Name: leque2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &250724852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250724851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b29421b74bae2549b5877152c8f796b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
+  bulletPoolTag: leque
+  fallbackBulletPrefab: {fileID: 0}
+  patternType: 2
+  bulletCount: 8
+  bulletSpeed: 5
+  fireRate: 0.3
+  startAngle: 0
+  angleOffsetPerShot: 10
+  fanSpreadAngle: 70
+--- !u!4 &250724853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250724851}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1236432021}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &267376558
 GameObject:
   m_ObjectHideFlags: 0
@@ -753,7 +859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &267527549
 Transform:
   m_ObjectHideFlags: 0
@@ -782,15 +888,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
   bulletPoolTag: spin
+  fallbackBulletPrefab: {fileID: 0}
   patternType: 1
-  bulletCount: 16
+  bulletCount: 10
   bulletSpeed: 5
-  fireRate: 0.2
+  fireRate: 0.5
   startAngle: 0
   angleOffsetPerShot: 10
   fanSpreadAngle: 60
-  autoStart: 0
-  loopPattern: 1
 --- !u!1 &287441150
 GameObject:
   m_ObjectHideFlags: 0
@@ -928,6 +1033,112 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 287441150}
   m_CullTransparentMesh: 1
+--- !u!1 &304396046
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 304396048}
+  - component: {fileID: 304396047}
+  m_Layer: 0
+  m_Name: leque3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &304396047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304396046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b29421b74bae2549b5877152c8f796b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
+  bulletPoolTag: leque
+  fallbackBulletPrefab: {fileID: 0}
+  patternType: 2
+  bulletCount: 10
+  bulletSpeed: 5
+  fireRate: 0.3
+  startAngle: 0
+  angleOffsetPerShot: 10
+  fanSpreadAngle: 80
+--- !u!4 &304396048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304396046}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1236432021}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &346098964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 346098966}
+  - component: {fileID: 346098965}
+  m_Layer: 0
+  m_Name: circle3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &346098965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346098964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b29421b74bae2549b5877152c8f796b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
+  bulletPoolTag: BossBulletRed
+  fallbackBulletPrefab: {fileID: 0}
+  patternType: 0
+  bulletCount: 21
+  bulletSpeed: 5
+  fireRate: 0.25
+  startAngle: 0
+  angleOffsetPerShot: 10
+  fanSpreadAngle: 60
+--- !u!4 &346098966
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346098964}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1236432021}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &379574504
 GameObject:
   m_ObjectHideFlags: 0
@@ -1015,7 +1226,7 @@ Transform:
   m_GameObject: {fileID: 444914136}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.04, y: -0.02, z: 0}
+  m_LocalPosition: {x: 3.79, y: 3.84, z: 0}
   m_LocalScale: {x: 1.7653015, y: 0.90909785, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2027,6 +2238,59 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &1002924710
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1002924712}
+  - component: {fileID: 1002924711}
+  m_Layer: 0
+  m_Name: circle2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1002924711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002924710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b29421b74bae2549b5877152c8f796b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
+  bulletPoolTag: BossBulletRed
+  fallbackBulletPrefab: {fileID: 0}
+  patternType: 0
+  bulletCount: 16
+  bulletSpeed: 5
+  fireRate: 0.3
+  startAngle: 0
+  angleOffsetPerShot: 10
+  fanSpreadAngle: 60
+--- !u!4 &1002924712
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002924710}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1236432021}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1044339545
 GameObject:
   m_ObjectHideFlags: 0
@@ -2038,12 +2302,12 @@ GameObject:
   - component: {fileID: 1044339546}
   - component: {fileID: 1044339547}
   m_Layer: 0
-  m_Name: new atack
+  m_Name: leque
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1044339546
 Transform:
   m_ObjectHideFlags: 0
@@ -2053,7 +2317,7 @@ Transform:
   m_GameObject: {fileID: 1044339545}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0035300013, y: -6.82123, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2071,16 +2335,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b29421b74bae2549b5877152c8f796b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
-  bulletPoolTag: BossBulletRed
+  bulletPoolTag: leque
+  fallbackBulletPrefab: {fileID: 0}
   patternType: 2
-  bulletCount: 16
+  bulletCount: 6
   bulletSpeed: 5
-  fireRate: 0.2
+  fireRate: 0.4
   startAngle: 0
   angleOffsetPerShot: 10
   fanSpreadAngle: 60
-  autoStart: 0
-  loopPattern: 1
 --- !u!1 &1079749312
 GameObject:
   m_ObjectHideFlags: 0
@@ -2097,7 +2360,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!58 &1079749313
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2250,12 +2513,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c2e464f41b20a81408129e310059d713, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -2270,14 +2533,22 @@ Transform:
   m_GameObject: {fileID: 1236432018}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.01, y: 9.21, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.1, y: 3.98, z: 0}
+  m_LocalScale: {x: 0.18974106, y: 0.19464579, z: 0.08120391}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 267527549}
   - {fileID: 1653980885}
   - {fileID: 1793070225}
   - {fileID: 1044339546}
+  - {fileID: 250724853}
+  - {fileID: 304396048}
+  - {fileID: 1373510815}
+  - {fileID: 1002924712}
+  - {fileID: 346098966}
+  - {fileID: 66590770}
+  - {fileID: 1646332483}
+  - {fileID: 1688828940}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1236432023
@@ -2299,6 +2570,14 @@ MonoBehaviour:
   - {fileID: 1653980886}
   - {fileID: 1793070226}
   - {fileID: 1044339547}
+  - {fileID: 250724852}
+  - {fileID: 304396047}
+  - {fileID: 1373510814}
+  - {fileID: 1002924711}
+  - {fileID: 346098965}
+  - {fileID: 66590769}
+  - {fileID: 1646332482}
+  - {fileID: 1688828939}
   phase1Waypoints:
   - {fileID: 1921770396}
   - {fileID: 1151673832}
@@ -2388,18 +2667,20 @@ PolygonCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.28866667}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 10.24, y: 10.24}
+    newSize: {x: 10.24, y: 10.24}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0, y: 0.5773587}
-      - {x: -0.5, y: -0.28866667}
-      - {x: 0.5, y: -0.28866667}
+    - - {x: 2.2466235, y: -0.6140662}
+      - {x: 0, y: 3.223763}
+      - {x: -3.111786, y: -0.42981544}
+      - {x: -1.1170027, y: -3.1155074}
+      - {x: 1.1170032, y: -3.0553617}
   m_UseDelaunayMesh: 1
 --- !u!1 &1246714620
 GameObject:
@@ -2523,11 +2804,64 @@ Transform:
   m_GameObject: {fileID: 1329823686}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.001, y: -0.007, z: 0}
-  m_LocalScale: {x: 0.4361431, y: 0.2246057, z: 0.24706438}
+  m_LocalPosition: {x: 0, y: -0.36, z: 0}
+  m_LocalScale: {x: 1.4233104, y: 1.3788822, z: 0.7260607}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 30542083}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1373510813
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1373510815}
+  - component: {fileID: 1373510814}
+  m_Layer: 0
+  m_Name: circle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1373510814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373510813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b29421b74bae2549b5877152c8f796b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
+  bulletPoolTag: BossBulletRed
+  fallbackBulletPrefab: {fileID: 0}
+  patternType: 0
+  bulletCount: 12
+  bulletSpeed: 5
+  fireRate: 0.3
+  startAngle: 0
+  angleOffsetPerShot: 10
+  fanSpreadAngle: 60
+--- !u!4 &1373510815
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373510813}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1236432021}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1507900649
 GameObject:
@@ -2560,19 +2894,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
   poolConfigs:
   - tag: spin
-    prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
+    prefab: {fileID: 2596407920847250324, guid: a2f7264ebb0dc6347bec49f4f73dee26, type: 3}
     defaultCapacity: 500
     maxSize: 1000
   - tag: leque
-    prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
+    prefab: {fileID: 2596407920847250324, guid: a2f7264ebb0dc6347bec49f4f73dee26, type: 3}
     defaultCapacity: 1000
     maxSize: 2000
   - tag: BossBulletRed1
-    prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
+    prefab: {fileID: 2596407920847250324, guid: a2f7264ebb0dc6347bec49f4f73dee26, type: 3}
     defaultCapacity: 3000
     maxSize: 5000
   - tag: BossBulletRed
-    prefab: {fileID: 5734319362736033398, guid: bc10280b51e3b474b81cdb55c99d1425, type: 3}
+    prefab: {fileID: 2596407920847250324, guid: a2f7264ebb0dc6347bec49f4f73dee26, type: 3}
     defaultCapacity: 7000
     maxSize: 9000
 --- !u!4 &1507900651
@@ -2629,6 +2963,59 @@ Transform:
   - {fileID: 1704769974}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1646332481
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1646332483}
+  - component: {fileID: 1646332482}
+  m_Layer: 0
+  m_Name: tiro2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1646332482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646332481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b29421b74bae2549b5877152c8f796b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
+  bulletPoolTag: BossBulletRed
+  fallbackBulletPrefab: {fileID: 0}
+  patternType: 3
+  bulletCount: 16
+  bulletSpeed: 5
+  fireRate: 0.2
+  startAngle: 0
+  angleOffsetPerShot: 10
+  fanSpreadAngle: 60
+--- !u!4 &1646332483
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646332481}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1236432021}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1653980884
 GameObject:
   m_ObjectHideFlags: 0
@@ -2640,12 +3027,12 @@ GameObject:
   - component: {fileID: 1653980885}
   - component: {fileID: 1653980886}
   m_Layer: 0
-  m_Name: Leque
+  m_Name: spin2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1653980885
 Transform:
   m_ObjectHideFlags: 0
@@ -2673,16 +3060,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b29421b74bae2549b5877152c8f796b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
-  bulletPoolTag: leque
-  patternType: 2
-  bulletCount: 10
+  bulletPoolTag: spin
+  fallbackBulletPrefab: {fileID: 0}
+  patternType: 1
+  bulletCount: 12
   bulletSpeed: 5
+  fireRate: 0.3
+  startAngle: 0
+  angleOffsetPerShot: 10
+  fanSpreadAngle: 60
+--- !u!1 &1688828938
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1688828940}
+  - component: {fileID: 1688828939}
+  m_Layer: 0
+  m_Name: tiro3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1688828939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688828938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b29421b74bae2549b5877152c8f796b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
+  bulletPoolTag: BossBulletRed
+  fallbackBulletPrefab: {fileID: 0}
+  patternType: 3
+  bulletCount: 16
+  bulletSpeed: 30
   fireRate: 0.5
   startAngle: 0
   angleOffsetPerShot: 10
   fanSpreadAngle: 60
-  autoStart: 0
-  loopPattern: 1
+--- !u!4 &1688828940
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688828938}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1236432021}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1704769973
 GameObject:
   m_ObjectHideFlags: 0
@@ -2725,12 +3164,12 @@ GameObject:
   - component: {fileID: 1793070225}
   - component: {fileID: 1793070226}
   m_Layer: 0
-  m_Name: New
+  m_Name: spin3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1793070225
 Transform:
   m_ObjectHideFlags: 0
@@ -2758,16 +3197,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b29421b74bae2549b5877152c8f796b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
-  bulletPoolTag: BossBulletRed1
-  patternType: 0
+  bulletPoolTag: spin
+  fallbackBulletPrefab: {fileID: 0}
+  patternType: 1
   bulletCount: 16
   bulletSpeed: 5
   fireRate: 0.2
   startAngle: 0
   angleOffsetPerShot: 10
   fanSpreadAngle: 60
-  autoStart: 0
-  loopPattern: 1
 --- !u!1 &1804795504
 GameObject:
   m_ObjectHideFlags: 0
