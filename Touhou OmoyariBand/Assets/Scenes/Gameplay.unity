@@ -149,7 +149,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: cf5ff4727c0df2948889455e78892458, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.265
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1698,7 +1698,7 @@ Transform:
   m_GameObject: {fileID: 1236432018}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1, y: 3.98, z: 0}
+  m_LocalPosition: {x: -0.21, y: 9.49, z: 0}
   m_LocalScale: {x: 0.18974106, y: 0.19464579, z: 0.08120391}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2110,6 +2110,71 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1236432021}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1395155154
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1395155156}
+  - component: {fileID: 1395155155}
+  m_Layer: 0
+  m_Name: ChordKeyboard
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1395155155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395155154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b316df3f865f48641bd895ffa2d0d732, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChordKeyboard
+  chords:
+  - chordName: G (Sol Maior)
+    key: 27
+    clip: {fileID: 8300000, guid: f3117227f9004604e8a0352b0500ad3e, type: 3}
+    source: {fileID: 0}
+  - chordName: "D (R\xE9 Maior)"
+    key: 25
+    clip: {fileID: 8300000, guid: 0862950edf605554ea7a272f535fb942, type: 3}
+    source: {fileID: 0}
+  - chordName: Em (Mi Menor)
+    key: 29
+    clip: {fileID: 8300000, guid: 75cb897deb0a02f4197b5c5a810db2fd, type: 3}
+    source: {fileID: 0}
+  - chordName: "C (D\xF3 Maior)"
+    key: 30
+    clip: {fileID: 8300000, guid: 3c0f0830d87c2b24c87179e72f8f635d, type: 3}
+    source: {fileID: 0}
+  volume: 1
+  monophonic: 1
+  fadeOutTime: 0.15
+  outputGroup: {fileID: 0}
+--- !u!4 &1395155156
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395155154}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.01861, y: 0.40826, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1507900649
 GameObject:
@@ -2608,3 +2673,4 @@ SceneRoots:
   - {fileID: 1561652860}
   - {fileID: 921999274}
   - {fileID: 1965305789}
+  - {fileID: 1395155156}
