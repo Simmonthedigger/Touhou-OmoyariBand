@@ -67,6 +67,11 @@ public class HUDController : MonoBehaviour
         if (pausePanel != null)
         {
             pausePanel.SetActive(isPaused);
+            Debug.Log($"[HUDController] Painel de Pausa alterado para: {isPaused}");
+        }
+        else
+        {
+            Debug.LogError("[HUDController] ERRO: O objeto 'pausePanel' não está atribuído no Inspector da cena HUD!");
         }
     }
 
