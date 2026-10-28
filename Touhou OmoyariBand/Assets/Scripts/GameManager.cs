@@ -1,17 +1,34 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+
+public enum GameState
+{
+    Iniciando,
+    Splash,
+    MenuPrincipal,
+    Gameplay
+}
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [Header("Música e Boss")]
+    [Header("Configuração dos Estados e Cenas")]
+    [SerializeField] private string splashSceneName = "Splash";
+    [SerializeField] private string mainMenuSceneName = "MainMenu";
+    [SerializeField] private string gameplaySceneName = "SampleScene";
+    [SerializeField] private string hudSceneName = "HUD";
+
+    [Header("Música e Boss (Gameplay)")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private BossController boss;
 
-    [Header("Cena de Reinicialização")]
-    [SerializeField] private string bootSceneName = "Boot";
+    [Header("Player Input System")]
+    [SerializeField] private PlayerInput playerInput;
 
+    public GameState CurrentState { get; private set; }
     private bool isGameOver = false;
 
     private void Awake()
@@ -19,6 +36,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject); // Mantém o GameManager persitente entre as cenas
         }
         else
         {
@@ -29,9 +47,119 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if (musicSource == null) musicSource = FindAnyObjectByType<AudioSource>();
-        if (boss == null) boss = FindAnyObjectByType<BossController>();
+        // Inscreve no evento de carregamento de cena da Unity
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        // Inicia o estado e dispara a sequência inicial do jogo
+        ChangeState(GameState.Iniciando);
+        StartCoroutine(Routine_SplashSequence());
     }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    // ==========================================
+    // --- MÁQUINA DE ESTADOS E MUDANÇA DE CENAS ---
+    // ==========================================
+
+    private void ChangeState(GameState newState)
+    {
+        CurrentState = newState;
+        Debug.Log($"[GameManager] Estado alterado para: {CurrentState}");
+    }
+
+    private IEnumerator Routine_SplashSequence()
+    {
+        ChangeState(GameState.Splash);
+        SceneManager.LoadScene(splashSceneName);
+
+        // Aguarda os 2 segundos exigidos na tela de Splash
+        yield return new WaitForSeconds(2.0f);
+
+        // Transita automaticamente para o Menu Principal
+        GoToMainMenu();
+    }
+
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f;
+        isGameOver = false;
+
+        ChangeState(GameState.MenuPrincipal);
+        SceneManager.LoadScene(mainMenuSceneName);
+    }
+
+    public void StartGameplay()
+    {
+        if (CurrentState != GameState.MenuPrincipal && CurrentState != GameState.Gameplay) return;
+
+        Time.timeScale = 1f;
+        isGameOver = false;
+
+        ChangeState(GameState.Gameplay);
+        StartCoroutine(Routine_LoadGameplayWithHUD());
+    }
+
+    private IEnumerator Routine_LoadGameplayWithHUD()
+    {
+        // 1. Carrega a cena de Gameplay
+        AsyncOperation loadGameplay = SceneManager.LoadSceneAsync(gameplaySceneName, LoadSceneMode.Single);
+        while (!loadGameplay.isDone)
+        {
+            yield return null;
+        }
+
+        // 2. Carrega a cena da HUD de forma aditiva
+        if (!string.IsNullOrEmpty(hudSceneName))
+        {
+            AsyncOperation loadHUD = SceneManager.LoadSceneAsync(hudSceneName, LoadSceneMode.Additive);
+            while (!loadHUD.isDone)
+            {
+                yield return null;
+            }
+        }
+    }
+
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+    }
+
+    // ==========================================
+    // --- OBSERVAÇÃO DE CENA E ALOCAÇÃO INPUT ---
+    // ==========================================
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Executa busca de referências específicas ao entrar na Gameplay
+        if (scene.name == gameplaySceneName)
+        {
+            if (musicSource == null) musicSource = FindAnyObjectByType<AudioSource>();
+            if (boss == null) boss = FindAnyObjectByType<BossController>();
+
+            // Busca e aloca o PlayerInput do jogador na cena de Gameplay
+            if (playerInput == null)
+            {
+                playerInput = FindAnyObjectByType<PlayerInput>();
+            }
+
+            if (playerInput != null)
+            {
+                playerInput.enabled = true;
+                Debug.Log("[GameManager] Input alocado com sucesso ao PlayerInput.");
+            }
+        }
+    }
+
+    // ==========================================
+    // --- LÓGICA DE GAMEPLAY (MANTIDA INTEGRAL) ---
+    // ==========================================
 
     public void UpdateLivesUI(int lives)
     {
@@ -75,12 +203,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Destrói o Boss e limpa todas as balas em tela ao vencer.
-    /// </summary>
     private void CleanUpEnemiesAndBullets()
     {
-        // Destrói o GameObject do Boss
         if (boss != null)
         {
             boss.StopAllPatterns();
@@ -89,20 +213,16 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // Busca caso o Boss tenha outro nome/tag e destrua
             GameObject bossObj = GameObject.FindGameObjectWithTag("Boss");
             if (bossObj != null) Destroy(bossObj);
         }
 
-        // Destrói todas as balas do Player ativas na cena
         PlayerBullet[] playerBullets = FindObjectsByType<PlayerBullet>(FindObjectsSortMode.None);
         foreach (PlayerBullet bullet in playerBullets)
         {
             if (bullet != null) Destroy(bullet.gameObject);
         }
 
-        // Destrói todas as balas do Boss/Inimigos ativas na cena
-        // (Busca pelo script de bala de inimigo se houver ou por Tag)
         GameObject[] enemyBullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
         foreach (GameObject bullet in enemyBullets)
         {
@@ -112,13 +232,11 @@ public class GameManager : MonoBehaviour
 
     private void StopGameElements()
     {
-        // Para a música da partida
         if (musicSource != null && musicSource.isPlaying)
         {
             musicSource.Stop();
         }
 
-        // Desativa o Boss caso ainda exista
         if (boss != null)
         {
             boss.StopAllPatterns();
@@ -129,14 +247,11 @@ public class GameManager : MonoBehaviour
             boss.gameObject.SetActive(false);
         }
 
-        // Congela o tempo de jogo
         Time.timeScale = 0f;
     }
 
     public void RestartGame()
     {
-        // Descongela o tempo antes de carregar a cena
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(bootSceneName);
+        StartGameplay();
     }
 }
