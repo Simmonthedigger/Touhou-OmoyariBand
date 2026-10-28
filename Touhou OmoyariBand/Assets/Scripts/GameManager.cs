@@ -8,7 +8,8 @@ public enum GameState
     Iniciando,
     Splash,
     MenuPrincipal,
-    Gameplay
+    Gameplay,
+    Pausado
 }
 
 public class GameManager : MonoBehaviour
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerInput playerInput;
 
     public GameState CurrentState { get; private set; }
+    private GameState previousState;
     private bool isGameOver = false;
 
     private void Awake()
@@ -36,7 +38,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Mantém o GameManager persitente entre as cenas
+            DontDestroyOnLoad(gameObject); // Mantém o GameManager persistente entre as cenas
         }
         else
         {
@@ -53,6 +55,18 @@ public class GameManager : MonoBehaviour
         // Inicia o estado e dispara a sequência inicial do jogo
         ChangeState(GameState.Iniciando);
         StartCoroutine(Routine_SplashSequence());
+    }
+
+    private void Update()
+    {
+        // Pressionar ESC alterna a pausa se o jogo estiver em Gameplay ou Pausado
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (CurrentState == GameState.Gameplay || CurrentState == GameState.Pausado)
+            {
+                TogglePause();
+            }
+        }
     }
 
     private void OnDestroy()
@@ -93,7 +107,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGameplay()
     {
-        if (CurrentState != GameState.MenuPrincipal && CurrentState != GameState.Gameplay) return;
+        if (CurrentState != GameState.MenuPrincipal && CurrentState != GameState.Gameplay && CurrentState != GameState.Pausado) return;
 
         Time.timeScale = 1f;
         isGameOver = false;
@@ -122,12 +136,44 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Alterna entre o estado de Pausa e Gameplay.
+    /// </summary>
+    public void TogglePause()
+    {
+        if (isGameOver) return; // Impede pausar se o jogo já tiver acabado (Game Over ou Vitória)
+
+        if (CurrentState == GameState.Gameplay)
+        {
+            previousState = CurrentState;
+            ChangeState(GameState.Pausado);
+
+            Time.timeScale = 0f; // Pausa a escala de tempo física/timers
+
+            if (HUDController.Instance != null)
+            {
+                HUDController.Instance.TogglePauseMenu(true);
+            }
+        }
+        else if (CurrentState == GameState.Pausado)
+        {
+            ChangeState(previousState);
+
+            Time.timeScale = 1f; // Restaura a escala de tempo normal
+
+            if (HUDController.Instance != null)
+            {
+                HUDController.Instance.TogglePauseMenu(false);
+            }
+        }
+    }
+
     public void QuitGame()
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+        Application.Quit();
 #endif
     }
 

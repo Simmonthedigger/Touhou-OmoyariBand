@@ -1,5 +1,6 @@
-using UnityEngine;
+using DG.Tweening;
 using TMPro;
+using UnityEngine;
 
 public class HUDController : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class HUDController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI livesText;
 
-    [Header("Painéis de Fim de Jogo")]
+    [Header("Painéis de UI")]
+    [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject victoryPanel;
 
@@ -19,8 +21,18 @@ public class HUDController : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
 
+        // Garante que todos os painéis comecem desativados
+        if (pausePanel != null) pausePanel.SetActive(false);
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (victoryPanel != null) victoryPanel.SetActive(false);
     }
@@ -47,6 +59,17 @@ public class HUDController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Ativa ou desativa a exibição do Painel de Pausa.
+    /// </summary>
+    public void TogglePauseMenu(bool isPaused)
+    {
+        if (pausePanel != null)
+        {
+            pausePanel.SetActive(isPaused);
+        }
+    }
+
     public void ShowGameOver(int score)
     {
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
@@ -59,11 +82,29 @@ public class HUDController : MonoBehaviour
         if (victoryScoreText != null) victoryScoreText.text = "Pontuação Final: " + score;
     }
 
+    // --- MÉTODOS DE BOTÕES DE UI ---
+
+    public void OnClickResume()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.TogglePause();
+        }
+    }
+
     public void OnClickRestart()
     {
         if (GameManager.Instance != null)
         {
             GameManager.Instance.RestartGame();
+        }
+    }
+
+    public void OnClickMainMenu()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.GoToMainMenu();
         }
     }
 }
