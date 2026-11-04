@@ -37,6 +37,20 @@ public class MatchProgressBar : MonoBehaviour
 
     private void Update()
     {
+        bool isGamePaused = (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Pausado);
+
+        if (!isGamePaused && (CurrentProgressNormalized >= 0.99f || (!musicSource.isPlaying && musicSource.time >= totalMusicDuration - 0.5f)))
+        {
+            if (!hasTriggeredVictory)
+            {
+                hasTriggeredVictory = true;
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.Victory();
+                }
+            }
+        }
+
         if (musicSource == null || totalMusicDuration <= 0f) return;
 
         CurrentProgressNormalized = Mathf.Clamp01(musicSource.time / totalMusicDuration);
@@ -74,5 +88,6 @@ public class MatchProgressBar : MonoBehaviour
                 }
             }
         }
+
     }
 }

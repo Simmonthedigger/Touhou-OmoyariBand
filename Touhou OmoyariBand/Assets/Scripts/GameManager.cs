@@ -1,7 +1,8 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -101,6 +102,12 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         isGameOver = false;
 
+        // Para a música da gameplay ao voltar para o menu
+        if (musicSource != null)
+        {
+            musicSource.Stop();
+        }
+
         ChangeState(GameState.MenuPrincipal);
         SceneManager.LoadScene(mainMenuSceneName);
     }
@@ -141,29 +148,43 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void TogglePause()
     {
-        if (isGameOver) return; // Impede pausar se o jogo já tiver acabado (Game Over ou Vitória)
+        if (isGameOver) return;
+
+        HUDController hud = HUDController.Instance ?? FindAnyObjectByType<HUDController>();
 
         if (CurrentState == GameState.Gameplay)
         {
             previousState = CurrentState;
             ChangeState(GameState.Pausado);
 
-            Time.timeScale = 0f; // Pausa a escala de tempo física/timers
+            Time.timeScale = 0f; // Congela a física e o tempo do jogo
 
-            if (HUDController.Instance != null)
+            // Pausa a música da partida
+            if (musicSource != null && musicSource.isPlaying)
             {
-                HUDController.Instance.TogglePauseMenu(true);
+                musicSource.Pause();
+            }
+
+            if (hud != null)
+            {
+                hud.TogglePauseMenu(true);
             }
         }
         else if (CurrentState == GameState.Pausado)
         {
             ChangeState(previousState);
 
-            Time.timeScale = 1f; // Restaura a escala de tempo normal
+            Time.timeScale = 1f; // Descongela o tempo do jogo
 
-            if (HUDController.Instance != null)
+            // Despausa/retoma a música de onde parou
+            if (musicSource != null)
             {
-                HUDController.Instance.TogglePauseMenu(false);
+                musicSource.UnPause();
+            }
+
+            if (hud != null)
+            {
+                hud.TogglePauseMenu(false);
             }
         }
     }
@@ -263,7 +284,7 @@ public class GameManager : MonoBehaviour
             if (bossObj != null) Destroy(bossObj);
         }
 
-        PlayerBullet[] playerBullets = FindObjectsByType<PlayerBullet>(FindObjectsSortMode.None);
+        PlayerBullet[] playerBullets = FindObjectsByType<PlayerBullet>();
         foreach (PlayerBullet bullet in playerBullets)
         {
             if (bullet != null) Destroy(bullet.gameObject);
