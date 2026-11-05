@@ -22,7 +22,15 @@ public class MatchProgressBar : MonoBehaviour
 
     private void Start()
     {
-        if (musicSource == null) musicSource = FindAnyObjectByType<AudioSource>();
+        InitializeComponents();
+    }
+
+    private void InitializeComponents()
+    {
+        if (musicSource == null)
+        {
+            musicSource = FindAnyObjectByType<AudioSource>();
+        }
 
         if (musicSource != null && musicSource.clip != null)
         {
@@ -37,29 +45,23 @@ public class MatchProgressBar : MonoBehaviour
 
     private void Update()
     {
-        bool isGamePaused = (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Pausado);
-
-        if (!isGamePaused && (CurrentProgressNormalized >= 0.99f || (!musicSource.isPlaying && musicSource.time >= totalMusicDuration - 0.5f)))
+        // 1. Garante que a referência da música e sua duração estejam configuradas
+        if (musicSource == null || totalMusicDuration <= 0f)
         {
-            if (!hasTriggeredVictory)
-            {
-                hasTriggeredVictory = true;
-                if (GameManager.Instance != null)
-                {
-                    GameManager.Instance.Victory();
-                }
-            }
+            InitializeComponents();
+            if (musicSource == null || totalMusicDuration <= 0f) return;
         }
 
-        if (musicSource == null || totalMusicDuration <= 0f) return;
-
+        // 2. Atualiza a porcentagem de progresso da música
         CurrentProgressNormalized = Mathf.Clamp01(musicSource.time / totalMusicDuration);
 
+        // 3. Atualiza o Slider no Canvas
         if (progressSlider != null)
         {
             progressSlider.value = CurrentProgressNormalized;
         }
 
+        // 4. Atualiza as cores do preenchimento da barra por fase
         if (fillImage != null)
         {
             if (CurrentProgressNormalized >= 0.66f)
@@ -76,10 +78,13 @@ public class MatchProgressBar : MonoBehaviour
             }
         }
 
-        // DISPARA A VITÓRIA E CONGELA O JOGO QUANDO A MÚSICA CHEGA AO FIM (100% DE PROGRESSO)
-        if (CurrentProgressNormalized >= 0.99f || (!musicSource.isPlaying && musicSource.time > 0f))
+        // 5. DISPARA A VITÓRIA APENAS SE A MÚSICA REALMENTE CHEGAR AO FIM E O JOGO NÃO ESTIVER PAUSADO
+        bool isGamePaused = (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Pausado);
+
+        if (!isGamePaused && !hasTriggeredVictory)
         {
-            if (!hasTriggeredVictory)
+            // A vitória só é acionada se o progresso atingir 99% ou se o áudio parar perto do fim da música
+            if (CurrentProgressNormalized >= 0.99f || (!musicSource.isPlaying && musicSource.time >= totalMusicDuration - 0.5f))
             {
                 hasTriggeredVictory = true;
                 if (GameManager.Instance != null)
@@ -88,6 +93,5 @@ public class MatchProgressBar : MonoBehaviour
                 }
             }
         }
-
     }
 }
