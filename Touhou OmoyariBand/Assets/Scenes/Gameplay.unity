@@ -446,6 +446,9 @@ MonoBehaviour:
   bulletPrefab: {fileID: 8046871150932942477, guid: 3db7dbe4c4aed6845bc0eb86f999486b, type: 3}
   firePoint: {fileID: 444914137}
   fireRate: 0.25
+  requireClickOnTarget: 1
+  targetTags:
+  - Boss
   defaultCapacity: 20
   maxPoolSize: 50
 --- !u!96 &30542086
@@ -1889,11 +1892,15 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 2.2466235, y: -0.6140662}
-      - {x: 0, y: 3.223763}
-      - {x: -3.111786, y: -0.42981544}
-      - {x: -1.1170027, y: -3.1155074}
-      - {x: 1.1170032, y: -3.0553617}
+    - - {x: 2.9408493, y: -1.8738979}
+      - {x: 2.2466235, y: -0.6140662}
+      - {x: 3.8046215, y: 0.6690502}
+      - {x: 3.652163, y: 3.501355}
+      - {x: 0.35789225, y: 4.404566}
+      - {x: -3.6363301, y: 3.6200707}
+      - {x: -5.0840054, y: -0.03400144}
+      - {x: -1.9429076, y: -4.269476}
+      - {x: 3.7874293, y: -4.907073}
   m_UseDelaunayMesh: 1
 --- !u!96 &1236432027
 TrailRenderer:

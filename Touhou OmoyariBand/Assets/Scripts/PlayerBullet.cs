@@ -10,7 +10,7 @@ public class PlayerBullet : MonoBehaviour
 
     private ObjectPool<GameObject> pool;
     private float timer;
-    private Transform targetBoss;
+    private Transform target; // alvo perseguido (Boss por padrão, ou o alvo clicado)
     private Rigidbody2D rb;
 
     private void Awake()
@@ -23,33 +23,51 @@ public class PlayerBullet : MonoBehaviour
         pool = bulletPool;
     }
 
+    /// <summary>
+    /// Define o alvo que a bala vai perseguir (chamado pelo PlayerShooter ao atirar em um alvo clicado).
+    /// </summary>
+    public void SetTarget(Transform newTarget)
+    {
+        if (newTarget == null) return;
+
+        target = newTarget;
+        AimAtTarget();
+    }
+
     private void OnEnable()
     {
         timer = 0f;
+        target = null;
 
-        // Busca o Boss na cena pela Tag "Boss"
+        // Padrão: busca o Boss na cena pela Tag "Boss"
         GameObject bossObj = GameObject.FindGameObjectWithTag("Boss");
         if (bossObj != null)
         {
-            targetBoss = bossObj.transform;
+            target = bossObj.transform;
+            AimAtTarget();
+        }
+    }
 
-            // Aponta a bala imediatamente na direção do Boss ao nascer
-            Vector2 direction = (Vector2)targetBoss.position - (Vector2)transform.position;
+    // Aponta a bala imediatamente na direção do alvo
+    private void AimAtTarget()
+    {
+        if (target == null) return;
 
-            if (direction != Vector2.zero)
-            {
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-                transform.rotation = Quaternion.Euler(0, 0, angle);
-            }
+        Vector2 direction = (Vector2)target.position - (Vector2)transform.position;
+
+        if (direction != Vector2.zero)
+        {
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+            transform.rotation = Quaternion.Euler(0, 0, angle);
         }
     }
 
     private void FixedUpdate()
     {
-        // Se o Boss estiver ativo na cena, ajusta a trajetória via física
-        if (targetBoss != null && targetBoss.gameObject.activeInHierarchy)
+        // Se o alvo estiver ativo na cena, ajusta a trajetória via física
+        if (target != null && target.gameObject.activeInHierarchy)
         {
-            Vector2 direction = (Vector2)targetBoss.position - rb.position;
+            Vector2 direction = (Vector2)target.position - rb.position;
             direction.Normalize();
 
             float rotateAmount = Vector3.Cross(direction, transform.up).z;
@@ -58,7 +76,7 @@ public class PlayerBullet : MonoBehaviour
         }
         else
         {
-            // Se não houver Boss ativo, segue reto na direção atual
+            // Se não houver alvo ativo, segue reto na direção atual
             rb.angularVelocity = 0f;
             rb.linearVelocity = transform.up * speed;
         }
@@ -84,6 +102,12 @@ public class PlayerBullet : MonoBehaviour
                 ScoreManager.Instance.AddBossHitPoints();
             }
 
+            ReturnToPool();
+        }
+        // Outro alvo clicado (que não é o Boss): a bala é consumida ao atingi-lo
+        else if (target != null && (collision.transform == target || collision.transform.IsChildOf(target)))
+        {
+            // TODO: aplicar dano/pontos ao alvo aqui, quando existirem outros alvos
             ReturnToPool();
         }
     }
