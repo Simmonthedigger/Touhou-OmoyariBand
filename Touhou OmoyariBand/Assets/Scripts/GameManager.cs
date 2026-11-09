@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     [Header("Configuração dos Estados e Cenas")]
     [SerializeField] private string splashSceneName = "Splash";
     [SerializeField] private string mainMenuSceneName = "MainMenu";
-    [SerializeField] private string gameplaySceneName = "SampleScene";
+    [SerializeField] private string gameplaySceneName = "SampleScene"; // Nome padrão ou da fase atual
     [SerializeField] private string hudSceneName = "HUD";
 
     [Header("Música e Boss (Gameplay)")]
@@ -112,9 +112,17 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(mainMenuSceneName);
     }
 
-    public void StartGameplay()
+    /// <summary>
+    /// Inicia uma fase passando o nome da cena. Se nenhum nome for fornecido, usa a cena padrão.
+    /// </summary>
+    public void StartGameplay(string targetSceneName = null)
     {
         if (CurrentState != GameState.MenuPrincipal && CurrentState != GameState.Gameplay && CurrentState != GameState.Pausado) return;
+
+        if (!string.IsNullOrEmpty(targetSceneName))
+        {
+            gameplaySceneName = targetSceneName;
+        }
 
         Time.timeScale = 1f;
         isGameOver = false;
@@ -125,7 +133,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Routine_LoadGameplayWithHUD()
     {
-        // 1. Carrega a cena de Gameplay
+        // 1. Carrega a cena de Gameplay atual
         AsyncOperation loadGameplay = SceneManager.LoadSceneAsync(gameplaySceneName, LoadSceneMode.Single);
         while (!loadGameplay.isDone)
         {
@@ -204,13 +212,14 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Executa busca de referências específicas ao entrar na Gameplay
+        // Executa busca de referências específicas ao carregar qualquer cena de Gameplay
         if (scene.name == gameplaySceneName)
         {
-            if (musicSource == null) musicSource = FindAnyObjectByType<AudioSource>();
-            if (boss == null) boss = FindAnyObjectByType<BossController>();
+            // Reobte os componentes da nova cena carregada
+            musicSource = FindAnyObjectByType<AudioSource>();
+            boss = FindAnyObjectByType<BossController>();
 
-            // Busca e aloca o PlayerInput do jogador na cena de Gameplay
+            // Busca e aloca o PlayerInput do jogador na cena
             if (playerInput == null)
             {
                 playerInput = FindAnyObjectByType<PlayerInput>();
@@ -219,7 +228,7 @@ public class GameManager : MonoBehaviour
             if (playerInput != null)
             {
                 playerInput.enabled = true;
-                Debug.Log("[GameManager] Input alocado com sucesso ao PlayerInput.");
+                Debug.Log($"[GameManager] Input alocado com sucesso na cena '{scene.name}'.");
             }
         }
     }
@@ -284,7 +293,7 @@ public class GameManager : MonoBehaviour
             if (bossObj != null) Destroy(bossObj);
         }
 
-        PlayerBullet[] playerBullets = FindObjectsByType<PlayerBullet>();
+        PlayerBullet[] playerBullets = FindObjectsByType<PlayerBullet>(FindObjectsInactive.Exclude);
         foreach (PlayerBullet bullet in playerBullets)
         {
             if (bullet != null) Destroy(bullet.gameObject);
@@ -319,6 +328,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        StartGameplay();
+        // Reinicia a mesma fase que estava sendo jogada
+        StartGameplay(gameplaySceneName);
     }
 }
