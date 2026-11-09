@@ -55,6 +55,9 @@ public class PlayerShooter : MonoBehaviour
 
     private void Update()
     {
+        // Durante a cutscene (diálogo) o Player não atira
+        if (CutsceneState.IsActive) return;
+
         // Atira no primeiro clique ou continuamente ao segurar
         if (Input.GetButton("Fire1") && Time.time >= nextFireTime)
         {

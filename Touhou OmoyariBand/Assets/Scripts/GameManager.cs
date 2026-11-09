@@ -158,6 +158,9 @@ public class GameManager : MonoBehaviour
     {
         if (isGameOver) return;
 
+        // Durante a cutscene (diálogo) não deixa pausar/despausar: despausar religaria o tempo no meio do diálogo
+        if (CutsceneState.IsActive) return;
+
         HUDController hud = HUDController.Instance ?? FindAnyObjectByType<HUDController>();
 
         if (CurrentState == GameState.Gameplay)
