@@ -25,11 +25,29 @@ public class MatchProgressBar : MonoBehaviour
         InitializeComponents();
     }
 
+    private AudioSource FindMusicAudioSource()
+    {
+        AudioSource[] sources = FindObjectsByType<AudioSource>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+
+        foreach (AudioSource source in sources)
+        {
+            // Ignora o AudioSource reservado para os sons da contagem regressiva
+            if (StageIntro.CountdownAudioSource != null && source == StageIntro.CountdownAudioSource)
+            {
+                continue;
+            }
+
+            return source;
+        }
+
+        return null;
+    }
+
     private void InitializeComponents()
     {
         if (musicSource == null)
         {
-            musicSource = FindAnyObjectByType<AudioSource>();
+            musicSource = FindMusicAudioSource();
         }
 
         if (musicSource != null && musicSource.clip != null)

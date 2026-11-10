@@ -45,12 +45,30 @@ public class StageIntro : MonoBehaviour
     [SerializeField] private float fontSize = 180f;
     [SerializeField] private Color textColor = Color.white;
 
+    [Header("Sons da contagem (opcional)")]
+    [Tooltip("AudioSource que toca os sons da contagem. Use um AudioSource SÓ para isso (nunca o da música). Desmarque Play On Awake nele.")]
+    [SerializeField] private AudioSource countdownAudioSource;
+
+    [Tooltip("Som tocado a cada número (3, 2, 1).")]
+    [SerializeField] private AudioClip tickClip;
+
+    [Tooltip("Som tocado quando aparece o GO!.")]
+    [SerializeField] private AudioClip goClip;
+
+    [SerializeField, Range(0f, 1f)] private float soundVolume = 1f;
+
     [Header("Eventos")]
     [Tooltip("Chamado quando o diálogo termina.")]
     public UnityEvent onDialogueFinished;
 
     [Tooltip("Chamado quando a luta começa (fim da contagem). Ex.: iniciar a música do RhythmMusic.")]
     public UnityEvent onStageStarted;
+
+    /// <summary>
+    /// AudioSource usado nos sons da contagem. Scripts que procuram "o AudioSource da música"
+    /// (ex.: GameManager) devem ignorar este.
+    /// </summary>
+    public static AudioSource CountdownAudioSource { get; private set; }
 
     private static readonly HashSet<string> playedScenes = new HashSet<string>();
 
@@ -70,10 +88,14 @@ public class StageIntro : MonoBehaviour
     private static void ResetStatics()
     {
         playedScenes.Clear();
+        CountdownAudioSource = null;
     }
 
     private void Awake()
     {
+        // Registra já no Awake (antes de o GameManager procurar a música) para ele poder ignorar este AudioSource
+        CountdownAudioSource = countdownAudioSource;
+
         bool hasDialogue = dialogue != null && dialogue.lines != null && dialogue.lines.Length > 0;
 
         string sceneName = gameObject.scene.name;
@@ -87,6 +109,8 @@ public class StageIntro : MonoBehaviour
         playDialogue = hasDialogue;
         playCountdown = hasCountdown;
         sequenceActive = true;
+
+        if (playCountdown) PrepareCountdownAudio();
 
         // Segura o boss: o comportamento dele só começa quando a luta começar
         bossController = FindAnyObjectByType<BossController>();
@@ -166,6 +190,7 @@ public class StageIntro : MonoBehaviour
         for (int n = countdownSeconds; n >= 1; n--)
         {
             ShowText(text, n.ToString());
+            PlaySound(tickClip);
 
             float t = 0f;
             while (t < 1f)
@@ -181,6 +206,7 @@ public class StageIntro : MonoBehaviour
         ReleaseGame(true);
 
         ShowText(text, goText);
+        PlaySound(goClip);
 
         float g = 0f;
         while (g < goDuration)
@@ -242,6 +268,26 @@ public class StageIntro : MonoBehaviour
         tmp.text = "";
 
         return tmp;
+    }
+
+    private void PrepareCountdownAudio()
+    {
+        if (countdownAudioSource == null) return;
+
+        // Sem isto, a pausa de áudio usada durante a contagem (que segura a música) também silenciaria este som
+        countdownAudioSource.ignoreListenerPause = true;
+
+        if (countdownAudioSource.playOnAwake && countdownAudioSource.clip != null)
+        {
+            Debug.LogWarning("[StageIntro] O AudioSource da contagem ('" + countdownAudioSource.name +
+                             "') parece ser o da música (tem clip e Play On Awake). Use um AudioSource separado, só para os sons da contagem.");
+        }
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (countdownAudioSource == null || clip == null) return;
+        countdownAudioSource.PlayOneShot(clip, soundVolume);
     }
 
     private void CleanupText()
@@ -315,6 +361,8 @@ public class StageIntro : MonoBehaviour
         // Se a cena for descarregada no meio da sequência, não deixa o jogo congelado ou sem som
         ReleaseGame(false);
         CleanupText();
+
+        if (CountdownAudioSource == countdownAudioSource) CountdownAudioSource = null;
     }
 
     // =====================================================

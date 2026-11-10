@@ -219,7 +219,7 @@ public class GameManager : MonoBehaviour
         if (scene.name == gameplaySceneName)
         {
             // Reobte os componentes da nova cena carregada
-            musicSource = FindAnyObjectByType<AudioSource>();
+            musicSource = FindMusicSource();
             boss = FindAnyObjectByType<BossController>();
 
             // Busca e aloca o PlayerInput do jogador na cena
@@ -239,6 +239,17 @@ public class GameManager : MonoBehaviour
     // ==========================================
     // --- LÓGICA DE GAMEPLAY (MANTIDA INTEGRAL) ---
     // ==========================================
+
+    // Procura o AudioSource da música, ignorando o AudioSource dos sons da contagem
+    private AudioSource FindMusicSource()
+    {
+        AudioSource[] sources = FindObjectsByType<AudioSource>(FindObjectsInactive.Exclude);
+        foreach (AudioSource source in sources)
+        {
+            if (source != StageIntro.CountdownAudioSource) return source;
+        }
+        return null;
+    }
 
     public void UpdateLivesUI(int lives)
     {
