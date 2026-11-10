@@ -12,13 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db474e8e112c10847814ea2e331724ac, type: 3}
   m_Name: Dialogue_Fase1
   m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  defaultVoiceSound: {fileID: 0}
   lines:
   - speaker: Erika
-    text: Hello My Folks
+    text: "Voc\xEA se move com WASD"
     portrait: {fileID: 21300000, guid: c2e464f41b20a81408129e310059d713, type: 3}
+    voiceSound: {fileID: 0}
+    pitchVariance: 0.1
   - speaker: Erika
-    text: are you all fine?
+    text: "N\xE3o deixe os tiros acertarem esse ponto vermelho em suas costas e mire
+      com o mause em mim para atirar."
     portrait: {fileID: 21300000, guid: c2e464f41b20a81408129e310059d713, type: 3}
-  - speaker: 'Nora '
-    text: Fuck oyou
-    portrait: {fileID: 8058694223230806719, guid: 052bc88b213192341b6ce2168867ccc1, type: 3}
+    voiceSound: {fileID: 0}
+    pitchVariance: 0.1
+  - speaker: Erika
+    text: "Voc\xEA gaha pontos por tempo sobrevivido e por dano causado"
+    portrait: {fileID: 21300000, guid: c2e464f41b20a81408129e310059d713, type: 3}
+    voiceSound: {fileID: 0}
+    pitchVariance: 0.1
+  - speaker: Erika
+    text: "Ah e ao tomar dano alem de perder pontos voc\xEA perde vida. Boa sorte
+      XD"
+    portrait: {fileID: 21300000, guid: c2e464f41b20a81408129e310059d713, type: 3}
+    voiceSound: {fileID: 0}
+    pitchVariance: 0.1
