@@ -2742,7 +2742,17 @@ MonoBehaviour:
   dialogue: {fileID: 11400000, guid: 4eefb877bab32a740b550c5b05d742bd, type: 2}
   playOnlyOncePerSession: 0
   waitForUITimeout: 3
+  countdownSeconds: 3
+  goText: GO!
+  goDuration: 0.8
+  hideBossDuringCountdown: 1
+  countdownText: {fileID: 0}
+  fontSize: 180
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   onDialogueFinished:
+    m_PersistentCalls:
+      m_Calls: []
+  onStageStarted:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &2014129479
