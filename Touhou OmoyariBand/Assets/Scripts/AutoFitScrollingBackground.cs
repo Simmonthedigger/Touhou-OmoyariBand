@@ -1,25 +1,32 @@
 using UnityEngine;
 
 /// <summary>
-/// Fundo infinito que rola para baixo em ciclo.
-/// Coloque em um objeto com SpriteRenderer (o sprite do fundo). O script cria sozinho as cópias
-/// necessárias para cobrir a tela e as reposiciona para a imagem se repetir sem cortes.
+/// Fundo infinito em ciclo que ajusta a largura EXATA para caber na tela com margem de segurança.
 /// </summary>
 [RequireComponent(typeof(SpriteRenderer))]
-public class ScrollingBackground : MonoBehaviour
+public class AutoFitScrollingBackground : MonoBehaviour
 {
+    [Header("Ajuste de Tela")]
+    [Tooltip("Marque se a imagem deve ajustar a largura para caber na tela.")]
+    [SerializeField] private bool fitToScreenWidth = true;
+
+    [Tooltip("Se ativo, mantém a proporção (Aspect Ratio) ao escalar a imagem para não esticar.")]
+    [SerializeField] private bool preserveAspectRatio = true;
+
+    [Tooltip("Margem extra em % para cobrir artefatos e bordas cinzas (ex: 1.03 = 3% mais largo que a tela).")]
+    [SerializeField, Range(1f, 1.1f)] private float safetyMarginWidth = 1.03f;
+
     [Header("Rolagem")]
     [Tooltip("Velocidade em unidades por segundo. Positivo = desce. Negativo = sobe.")]
     [SerializeField] private float scrollSpeed = 2f;
 
-    [Header("Ajustes finos")]
-    [Tooltip("Sobreposição (em unidades) entre as cópias, para evitar fresta fina entre elas.")]
-    [SerializeField] private float tileOverlap = 0.005f;
+    [Header("Ajustes Finos")]
+    [Tooltip("Sobreposição (em unidades) entre as cópias, para evitar fresta fina.")]
+    [SerializeField] private float tileOverlap = 0.01f;
 
-    [Tooltip("Cópias extras de segurança. Aumente se aparecer espaço vazio em telas muito altas.")]
-    [SerializeField] private int extraTiles = 0;
+    [Tooltip("Cópias extras de segurança para telas muito altas.")]
+    [SerializeField] private int extraTiles = 1;
 
-    /// <summary>Permite mudar a velocidade por outros scripts (ex.: acelerar na troca de fase).</summary>
     public float ScrollSpeed
     {
         get => scrollSpeed;
@@ -31,24 +38,34 @@ public class ScrollingBackground : MonoBehaviour
     private float spacing;
     private float offset;
     private Vector3 startPos;
+    private Camera cam;
 
     private void Start()
     {
+        cam = Camera.main;
         SpriteRenderer source = GetComponent<SpriteRenderer>();
 
+        if (source == null || source.sprite == null) return;
+
+        // 1. Ajusta a escala com base nas dimensões da tela + margem de segurança
+        if (fitToScreenWidth && cam != null)
+        {
+            AjustarEscalaExataTela(source);
+        }
+
+        // 2. Calcula as dimensões FINAIS (após o ajuste de escala)
         float height = source.bounds.size.y;
         spacing = Mathf.Max(0.01f, height - tileOverlap);
         startPos = transform.position;
 
-        // Altura visível da câmera (para saber quantas cópias são necessárias)
+        // Altura visível da câmera
         float viewHeight = height;
-        Camera cam = Camera.main;
         if (cam != null && cam.orthographic)
         {
             viewHeight = cam.orthographicSize * 2f;
         }
 
-        // Se a imagem for menor que a tela, precisamos de cópias extras acima e abaixo
+        // 3. Calcula e cria os tiles necessários
         int m = Mathf.Max(0, Mathf.CeilToInt((viewHeight - height) / (2f * spacing))) + Mathf.Max(0, extraTiles);
         int kMin = -m;
         int kMax = 1 + m;
@@ -67,17 +84,45 @@ public class ScrollingBackground : MonoBehaviour
         UpdateTiles();
     }
 
+    private void AjustarEscalaExataTela(SpriteRenderer sr)
+    {
+        // Tamanho real da imagem sem nenhuma escala aplicada
+        float larguraRealSprite = sr.sprite.rect.width / sr.sprite.pixelsPerUnit;
+
+        // Largura total da câmera no mundo 2D
+        float alturaCamWorld = cam.orthographicSize * 2f;
+        float larguraCamWorld = alturaCamWorld * cam.aspect;
+
+        // Multiplica por safetyMarginWidth para cobrir completamente a lateral da tela
+        float escalaX = (larguraCamWorld / larguraRealSprite) * safetyMarginWidth;
+
+        Vector3 novaEscala = transform.localScale;
+        novaEscala.x = escalaX;
+
+        if (preserveAspectRatio)
+        {
+            novaEscala.y = escalaX;
+        }
+
+        // Aplica a escala direta
+        transform.localScale = novaEscala;
+    }
+
     private void Update()
     {
-        // Mathf.Repeat faz o ciclo: ao percorrer a altura de uma imagem, volta a 0 sem emenda visível
+        // Se o jogo estiver em pausa de física/cutscene, o Time.deltaTime vai tratar corretamente
         offset = Mathf.Repeat(offset + scrollSpeed * Time.deltaTime, spacing);
         UpdateTiles();
     }
 
     private void UpdateTiles()
     {
+        if (tiles == null) return;
+
         for (int i = 0; i < tiles.Length; i++)
         {
+            if (tiles[i] == null) continue;
+
             Vector3 pos = startPos;
             pos.y += tileIndices[i] * spacing - offset;
             tiles[i].position = pos;
@@ -115,7 +160,6 @@ public class ScrollingBackground : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Remove as cópias criadas pelo script
         if (tiles == null) return;
 
         foreach (Transform t in tiles)

@@ -27,22 +27,13 @@ public class MatchProgressBar : MonoBehaviour
 
     private AudioSource FindMusicAudioSource()
     {
-        AudioSource[] sources = FindObjectsByType<AudioSource>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-
-        foreach (AudioSource source in sources)
+        GameObject musicObj = GameObject.FindGameObjectWithTag("MusicSource");
+        if (musicObj != null)
         {
-            // Ignora o AudioSource reservado para os sons da contagem regressiva
-            if (StageIntro.CountdownAudioSource != null && source == StageIntro.CountdownAudioSource)
-            {
-                continue;
-            }
-
-            return source;
+            return musicObj.GetComponent<AudioSource>();
         }
-
         return null;
     }
-
     private void InitializeComponents()
     {
         if (musicSource == null)
