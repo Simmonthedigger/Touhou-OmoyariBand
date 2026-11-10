@@ -6,7 +6,6 @@ using UnityEngine.UI;
 /// <summary>
 /// Caixa de diálogo. Fica na cena de HUD (compartilhada por todas as fases).
 /// Usa tempo NÃO escalado, então funciona normalmente com Time.timeScale = 0.
-/// IMPORTANTE: este script deve ficar em um objeto SEMPRE ativo; o 'panel' é um FILHO que é ligado/desligado.
 /// </summary>
 public class DialoguePlayer : MonoBehaviour
 {
@@ -26,6 +25,19 @@ public class DialoguePlayer : MonoBehaviour
     [Tooltip("Letras por segundo no efeito de digitação. 0 = mostra a fala inteira de uma vez.")]
     [SerializeField] private float charsPerSecond = 45f;
 
+    [Header("Áudio (Sons Estilo Undertale)")]
+    [Tooltip("AudioSource para os bips de texto. Se vazio, será criado automaticamente.")]
+    [SerializeField] private AudioSource voiceAudioSource;
+
+    [Tooltip("Som de bip padrão caso nada seja configurado no DialogueData.")]
+    [SerializeField] private AudioClip fallbackVoiceSound;
+
+    [Tooltip("Toca o som a cada N caracteres revelados (1 = toda letra, 2 = letra sim/letra não).")]
+    [SerializeField, Range(1, 5)] private int soundFrequency = 2;
+
+    [Tooltip("Pitch base do som (1 = normal, 1.5 = mais agudo, 0.8 = mais grave).")]
+    [SerializeField, Range(0.5f, 2f)] private float basePitch = 1.0f;
+
     public bool IsPlaying { get; private set; }
 
     private DialogueData data;
@@ -35,6 +47,9 @@ public class DialoguePlayer : MonoBehaviour
     private float visibleChars;
     private bool lineComplete;
     private float inputUnlockTime;
+    private CanvasGroup canvasGroup;
+
+    private int lastPlayedCharIndex = -1;
 
     private void Awake()
     {
@@ -53,6 +68,20 @@ public class DialoguePlayer : MonoBehaviour
         }
 
         Instance = this;
+
+        // Prepara o AudioSource e garante que ignore a pausa global (AudioListener.pause = true)
+        if (voiceAudioSource == null)
+        {
+            voiceAudioSource = gameObject.AddComponent<AudioSource>();
+        }
+        voiceAudioSource.ignoreListenerPause = true;
+        voiceAudioSource.playOnAwake = false;
+
+        canvasGroup = panel.GetComponent<CanvasGroup>();
+        if (canvasGroup == null) canvasGroup = panel.AddComponent<CanvasGroup>();
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
+
         panel.SetActive(false);
     }
 
@@ -61,7 +90,6 @@ public class DialoguePlayer : MonoBehaviour
         if (Instance == this) Instance = null;
     }
 
-    /// <summary>Inicia um diálogo. 'finished' é chamado quando o jogador passa a última fala.</summary>
     public void Play(DialogueData dialogue, Action finished)
     {
         if (dialogue == null || dialogue.lines == null || dialogue.lines.Length == 0)
@@ -75,9 +103,9 @@ public class DialoguePlayer : MonoBehaviour
         lineIndex = -1;
         IsPlaying = true;
 
-        // Pequena folga para ignorar um clique que ainda esteja "sobrando" da tela anterior
         inputUnlockTime = Time.unscaledTime + 0.25f;
 
+        canvasGroup.alpha = 1f;
         panel.SetActive(true);
         ShowNextLine();
     }
@@ -86,20 +114,24 @@ public class DialoguePlayer : MonoBehaviour
     {
         if (!IsPlaying) return;
 
-        // 1. Entrada: clique esquerdo, Espaço ou Enter
+        bool gamePaused = GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Pausado;
+        canvasGroup.alpha = gamePaused ? 0f : 1f;
+        if (gamePaused) return;
+
+        // 1. Entrada de avanço
         if (Time.unscaledTime >= inputUnlockTime)
         {
             bool advance = Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return);
 
             if (advance)
             {
-                if (!lineComplete) CompleteLine(); // 1º clique: mostra a fala inteira
-                else ShowNextLine();               // 2º clique: próxima fala
+                if (!lineComplete) CompleteLine();
+                else ShowNextLine();
                 return;
             }
         }
 
-        // 2. Efeito de digitação
+        // 2. Efeito de digitação com emissão de som
         if (!lineComplete)
         {
             if (charsPerSecond <= 0f)
@@ -109,10 +141,48 @@ public class DialoguePlayer : MonoBehaviour
             }
 
             visibleChars += charsPerSecond * Time.unscaledDeltaTime;
-            bodyText.maxVisibleCharacters = Mathf.FloorToInt(visibleChars);
+            int currentVisibleCount = Mathf.FloorToInt(visibleChars);
+
+            bodyText.maxVisibleCharacters = currentVisibleCount;
+
+            // Dispara o bip de voz sempre que um novo caractere for revelado
+            if (currentVisibleCount > lastPlayedCharIndex)
+            {
+                PlayCharacterSound(currentVisibleCount);
+                lastPlayedCharIndex = currentVisibleCount;
+            }
 
             if (visibleChars >= totalChars) CompleteLine();
         }
+    }
+
+    private void PlayCharacterSound(int charIndex)
+    {
+        if (voiceAudioSource == null) return;
+        if (charIndex % soundFrequency != 0) return; // Filtra a frequência para não encavalar o som
+
+        DialogueData.Line currentLine = data.lines[lineIndex];
+
+        // Determina qual som usar (Prioridade: Fala -> Diálogo -> Fallback)
+        AudioClip clipToPlay = currentLine.voiceSound;
+        if (clipToPlay == null && data != null) clipToPlay = data.defaultVoiceSound;
+        if (clipToPlay == null) clipToPlay = fallbackVoiceSound;
+
+        if (clipToPlay == null) return;
+
+        // Ignora espaços e pontuações na hora de tocar o bip
+        if (charIndex - 1 < bodyText.textInfo.characterInfo.Length)
+        {
+            char character = bodyText.textInfo.characterInfo[Mathf.Max(0, charIndex - 1)].character;
+            if (char.IsWhiteSpace(character) || char.IsPunctuation(character)) return;
+        }
+
+        // Variação leve no pitch (estilo Undertale/Animal Crossing)
+        float variance = currentLine.pitchVariance;
+        float randomPitch = UnityEngine.Random.Range(basePitch - variance, basePitch + variance);
+
+        voiceAudioSource.pitch = randomPitch;
+        voiceAudioSource.PlayOneShot(clipToPlay);
     }
 
     private void ShowNextLine()
@@ -144,6 +214,7 @@ public class DialoguePlayer : MonoBehaviour
 
         totalChars = bodyText.textInfo.characterCount;
         visibleChars = 0f;
+        lastPlayedCharIndex = 0;
         lineComplete = false;
 
         if (continueIndicator != null) continueIndicator.SetActive(false);

@@ -387,7 +387,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 8058694223230806719, guid: 052bc88b213192341b6ce2168867ccc1, type: 3}
+  m_Sprite: {fileID: 4593992201896182468, guid: 79f956fbf42d24741887832c17c0ca58, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2742,7 +2742,21 @@ MonoBehaviour:
   dialogue: {fileID: 11400000, guid: 4eefb877bab32a740b550c5b05d742bd, type: 2}
   playOnlyOncePerSession: 0
   waitForUITimeout: 3
+  countdownSeconds: 3
+  goText: GO!
+  goDuration: 0.8
+  hideBossDuringCountdown: 1
+  countdownText: {fileID: 0}
+  fontSize: 180
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  countdownAudioSource: {fileID: 0}
+  tickClip: {fileID: 0}
+  goClip: {fileID: 0}
+  soundVolume: 1
   onDialogueFinished:
+    m_PersistentCalls:
+      m_Calls: []
+  onStageStarted:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &2014129479

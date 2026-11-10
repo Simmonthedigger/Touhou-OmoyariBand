@@ -18,7 +18,18 @@ public class DialogueData : ScriptableObject
 
         [Tooltip("Retrato de quem fala (opcional).")]
         public Sprite portrait;
+
+        [Header("Áudio da Fala (Undertale Style)")]
+        [Tooltip("Som da voz deste personagem. Se vazio, usa o som padrão do DialogueData ou do DialoguePlayer.")]
+        public AudioClip voiceSound;
+
+        [Tooltip("Variação aleatória de pitch (tom) a cada caractere para um som mais natural.")]
+        [Range(0f, 0.5f)] public float pitchVariance = 0.1f;
     }
+
+    [Header("Áudio Padrão do Diálogo")]
+    [Tooltip("Som de voz padrão para todas as falas deste diálogo (caso o personagem não tenha um som específico).")]
+    public AudioClip defaultVoiceSound;
 
     public Line[] lines;
 }
