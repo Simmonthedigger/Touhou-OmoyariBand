@@ -18,8 +18,17 @@ EditorBuildSettings:
     path: Assets/Scenes/Gameplay.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Scenes/2Fase.unity
-    guid: 966b182a8c5585f49ad57e790e5083b6
+    path: Assets/Scenes/Gameplay 1.unity
+    guid: 3b68424dacf023c44b415fb30e5b30b1
+  - enabled: 1
+    path: Assets/Scenes/Gameplay 2.unity
+    guid: 44d3d45292b50934e9572f95948b3b80
+  - enabled: 1
+    path: Assets/Scenes/Gameplay 3.unity
+    guid: 9fb6d3720a5e7c443a6edd2ef0e837f2
+  - enabled: 1
+    path: Assets/Scenes/Gameplay 4.unity
+    guid: dec9e371449abd740babfde90f3c55c3
   - enabled: 1
     path: Assets/Scenes/HUD.unity
     guid: df844d53ea071b64da41c7d07bc4eaa7
