@@ -218,7 +218,7 @@ public class GameManager : MonoBehaviour
         // Executa busca de referências específicas ao carregar qualquer cena de Gameplay
         if (scene.name == gameplaySceneName)
         {
-            // Reobte os componentes da nova cena carregada
+            // Reobtém os componentes da nova cena carregada
             musicSource = FindMusicSource();
             boss = FindAnyObjectByType<BossController>();
 
@@ -274,6 +274,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Atalho caso o script do Boss chame OnBossDefeated() ao zerar a vida.
+    /// </summary>
+    public void OnBossDefeated()
+    {
+        Victory();
+    }
+
     public void Victory()
     {
         if (isGameOver) return;
@@ -285,11 +293,21 @@ public class GameManager : MonoBehaviour
         // 2. Para a música e congela o tempo
         StopGameElements();
 
+        // 3. Pega a pontuação final do jogador
         int finalScore = (ScoreManager.Instance != null) ? ScoreManager.Instance.GetCurrentScore() : 0;
 
+        // 4. Mantém a chamada original do HUDController (se houver)
         if (HUDController.Instance != null)
         {
             HUDController.Instance.ShowVictory(finalScore);
+        }
+
+        // 5. Localiza o painel de Vitória com Leaderboard (mesmo se estiver desativado na cena/HUD) e envia os dados para a nuvem
+        VictoryScreenUI victoryScreenUI = FindAnyObjectByType<VictoryScreenUI>(FindObjectsInactive.Include);
+        if (victoryScreenUI != null)
+        {
+            victoryScreenUI.gameObject.SetActive(true);
+            victoryScreenUI.DisplayVictoryScreen(finalScore);
         }
     }
 
