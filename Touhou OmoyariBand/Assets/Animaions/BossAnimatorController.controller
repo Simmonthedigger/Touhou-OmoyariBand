@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
   phaseIndex: 1
-  patternIndex: 6
+  patternIndex: 9
   stateDuration: 4
 --- !u!1101 &-4518028979800052601
 AnimatorStateTransition:
@@ -404,7 +404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
   phaseIndex: 1
-  patternIndex: 6
+  patternIndex: 9
   stateDuration: 4
 --- !u!1102 &691196402037883699
 AnimatorState:
@@ -646,7 +646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
   phaseIndex: 1
-  patternIndex: 9
+  patternIndex: 0
   stateDuration: 4
 --- !u!1102 &3913808913596526729
 AnimatorState:
@@ -770,7 +770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossPatternState
   phaseIndex: 1
-  patternIndex: 9
+  patternIndex: 0
   stateDuration: 4
 --- !u!1101 &7785999293116577700
 AnimatorStateTransition:
