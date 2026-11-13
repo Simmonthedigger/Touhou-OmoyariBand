@@ -13,4 +13,9 @@ MonoBehaviour:
   m_Name: Dalogo Fase 2
   m_EditorClassIdentifier: Assembly-CSharp::DialogueData
   defaultVoiceSound: {fileID: 0}
-  lines: []
+  lines:
+  - speaker: 
+    text: asaaaaaaaaaaa
+    portrait: {fileID: 21300000, guid: c2e464f41b20a81408129e310059d713, type: 3}
+    voiceSound: {fileID: 0}
+    pitchVariance: 0

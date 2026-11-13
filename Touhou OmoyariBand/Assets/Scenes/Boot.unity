@@ -119,6 +119,65 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &114247080
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 114247082}
+  - component: {fileID: 114247081}
+  m_Layer: 0
+  m_Name: CursorManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &114247081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114247080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f4c1577afe594849bb619c8e81ddf9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CursorManager
+  defaultStyle:
+    texture: {fileID: 2800000, guid: f97181930ee212e44bfd79eabe4c0d36, type: 3}
+    hotspot: {x: 0, y: 0}
+    centerHotspot: 0
+  aimStyle:
+    texture: {fileID: 2800000, guid: 9befd37628908334993abceae6bba6b1, type: 3}
+    hotspot: {x: 0, y: 0}
+    centerHotspot: 1
+  buttonStyle:
+    texture: {fileID: 2800000, guid: a17df88aadebfd44db943423ebc426ea, type: 3}
+    hotspot: {x: 4, y: 0}
+    centerHotspot: 0
+  targetTags:
+  - Boss
+  cursorMode: 0
+--- !u!4 &114247082
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114247080}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 546.42993, y: 524.21936, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &353673143
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,3 +452,4 @@ SceneRoots:
   - {fileID: 353673146}
   - {fileID: 1736025137}
   - {fileID: 1404473818}
+  - {fileID: 114247082}

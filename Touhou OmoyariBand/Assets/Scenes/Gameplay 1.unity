@@ -1951,6 +1951,10 @@ PrefabInstance:
       value: StageIntro
       objectReference: {fileID: 0}
     - target: {fileID: 4498133110518346329, guid: 8d60a57155bd46e45a886afb19a61b6e, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 5b246c077e54ff743a46d71b02af98c5, type: 2}
+    - target: {fileID: 4498133110518346329, guid: 8d60a57155bd46e45a886afb19a61b6e, type: 3}
       propertyPath: countdownAudioSource
       value: 
       objectReference: {fileID: 1893120456}

@@ -15,24 +15,30 @@ MonoBehaviour:
   defaultVoiceSound: {fileID: 0}
   lines:
   - speaker: Erika
-    text: "Voc\xEA se move com WASD"
+    text: "Voc\xEA \xE9 nova aqui n\xE3o \xE9?\r\nDeixe-me lhe explicar como as coisas
+      funcionam por aqui"
     portrait: {fileID: 21300000, guid: c2e464f41b20a81408129e310059d713, type: 3}
     voiceSound: {fileID: 0}
     pitchVariance: 0.1
   - speaker: Erika
-    text: "N\xE3o deixe os tiros acertarem esse ponto vermelho em suas costas e mire
-      com o mause em mim para atirar."
+    text: "Esse ponto vermelho \xE9 sua vida, n\xE3o deixe nada encostar nele. Use
+      WASD para se mover e protege-lo"
     portrait: {fileID: 21300000, guid: c2e464f41b20a81408129e310059d713, type: 3}
     voiceSound: {fileID: 0}
     pitchVariance: 0.1
   - speaker: Erika
-    text: "Voc\xEA gaha pontos por tempo sobrevivido e por dano causado"
+    text: "Para tocar sua m\xFAsica e acertar seus oponentes, mire com o cursor neles\r\n"
     portrait: {fileID: 21300000, guid: c2e464f41b20a81408129e310059d713, type: 3}
     voiceSound: {fileID: 0}
     pitchVariance: 0.1
   - speaker: Erika
-    text: "Ah e ao tomar dano alem de perder pontos voc\xEA perde vida. Boa sorte
-      XD"
+    text: "Acertar seus oponentes e sobreviver pela fase lhe dar\xE1 pontos, tomar
+      dano reduzir\xE1 eles, v\xE1 atr\xE1s do m\xE1ximo de pontos que conseguir\r\n"
+    portrait: {fileID: 21300000, guid: c2e464f41b20a81408129e310059d713, type: 3}
+    voiceSound: {fileID: 0}
+    pitchVariance: 0.1
+  - speaker: Erika
+    text: "Agora sem mais enrola\xE7\xE3o, vamos tocar!"
     portrait: {fileID: 21300000, guid: c2e464f41b20a81408129e310059d713, type: 3}
     voiceSound: {fileID: 0}
     pitchVariance: 0.1
