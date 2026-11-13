@@ -97,6 +97,14 @@ public class HUDController : MonoBehaviour
         }
     }
 
+     public void OnClick_LoadStageScene(string sceneName)
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartGameplay(sceneName); // Alterado aqui
+        }
+    }
+
     public void OnClickRestart()
     {
         if (GameManager.Instance != null)
