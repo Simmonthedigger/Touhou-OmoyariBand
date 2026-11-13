@@ -155,8 +155,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 831, y: 994}
-  m_SizeDelta: {x: 2707.863, y: 42.85}
+  m_AnchoredPosition: {x: 1399, y: 1013}
+  m_SizeDelta: {x: 2656.464, y: 41.488}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &13791785
 MonoBehaviour:
@@ -2386,8 +2386,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -831.22687, y: -332.1641}
-  m_SizeDelta: {x: -1524.107, y: -664.331}
+  m_AnchoredPosition: {x: -1390.6, y: -342.049}
+  m_SizeDelta: {x: -2642.9, y: -684.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1161205932
 MonoBehaviour:
@@ -3022,7 +3022,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 613.55, y: 63.705196}
+  m_AnchoredPosition: {x: 613.55, y: 54.601}
   m_SizeDelta: {x: 254.53, y: 315.6959}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1412433016
@@ -3855,8 +3855,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 12.019104, y: -415.3663}
-  m_SizeDelta: {x: -24.0382, y: -830.7427}
+  m_AnchoredPosition: {x: 12.019104, y: -482.45392}
+  m_SizeDelta: {x: -24.0382, y: -964.918}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1803363191
 MonoBehaviour:
@@ -3952,7 +3952,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -300.91, y: 924.3}
+  m_AnchoredPosition: {x: 291.17996, y: 937.2999}
   m_SizeDelta: {x: 444.042, y: 80.5465}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1817004517
@@ -4089,7 +4089,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -253.09, y: 868}
+  m_AnchoredPosition: {x: 339, y: 881}
   m_SizeDelta: {x: 539.688, y: 107.1259}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1818043730
@@ -4502,7 +4502,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Gameplay 2
+          m_StringArgument: Gameplay 1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1925677643
