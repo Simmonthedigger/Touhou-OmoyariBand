@@ -1823,7 +1823,7 @@ GameObject:
   - component: {fileID: 1981743798}
   - component: {fileID: 1981743797}
   m_Layer: 0
-  m_Name: Square (1)
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1842,7 +1842,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScrollingBackground
   mode: 0
-  videoClip: {fileID: 0}
+  videoClip: {fileID: 32900000, guid: 1a2457e7556320c469cd5d4310bdcfa2, type: 3}
   loopVideo: 1
   playbackSpeed: 1
   fitToScreenWidth: 1

@@ -2716,8 +2716,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52c606204608a5d47a711d1c7f94ccb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScrollingBackground
+  mode: 0
+  videoClip: {fileID: 0}
+  loopVideo: 1
+  playbackSpeed: 1
   fitToScreenWidth: 1
   preserveAspectRatio: 1
+  safetyMarginWidth: 1.03
   scrollSpeed: 2
   tileOverlap: 0.005
   extraTiles: 0
