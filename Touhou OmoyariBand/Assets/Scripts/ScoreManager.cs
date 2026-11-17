@@ -19,6 +19,13 @@ public class ScoreManager : MonoBehaviour
 
     private float currentScore;
 
+    /// <summary>
+    /// Disparado sempre que o jogador GANHA pontos.
+    /// Parâmetros: quantidade de pontos e se veio do tempo (true) ou de um acerto no Boss (false).
+    /// Usado pelo ManaSystem para converter pontos em mana.
+    /// </summary>
+    public event System.Action<float, bool> PointsGained;
+
     private void Awake()
     {
         if (Instance == null)
@@ -40,7 +47,9 @@ public class ScoreManager : MonoBehaviour
     private void Update()
     {
         // Acumula pontos contínuos com base no tempo de jogo
-        currentScore += pointsPerSecond * Time.deltaTime;
+        float timePoints = pointsPerSecond * Time.deltaTime;
+        currentScore += timePoints;
+        PointsGained?.Invoke(timePoints, true);
         UpdateScoreUI();
     }
 
@@ -50,6 +59,7 @@ public class ScoreManager : MonoBehaviour
     public void AddBossHitPoints()
     {
         currentScore += pointsPerBossHit;
+        PointsGained?.Invoke(pointsPerBossHit, false);
         UpdateScoreUI();
     }
 
@@ -58,6 +68,9 @@ public class ScoreManager : MonoBehaviour
     /// </summary>
     public void DeductDamagePoints()
     {
+        // Durante a invulnerabilidade de uma habilidade (dash / escudo), não perde pontos
+        if (PlayerAbilities.IsPlayerInvulnerable) return;
+
         currentScore -= pointsLostOnDamage;
 
         if (!allowNegativeScore && currentScore < 0f)

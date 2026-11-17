@@ -29,6 +29,9 @@ public class PlayerShooter : MonoBehaviour
     private ObjectPool<GameObject> bulletPool;
     private float nextFireTime;
 
+    /// <summary>Multiplica o intervalo entre tiros (usado pelo PlayerAbilities). 0.5 = atira 2x mais rápido.</summary>
+    public float FireRateMultiplier { get; set; } = 1f;
+
     private Camera cam;
     private ContactFilter2D contactFilter;
     private readonly List<Collider2D> hits = new List<Collider2D>();
@@ -69,7 +72,7 @@ public class PlayerShooter : MonoBehaviour
                 if (target == null) return; // clicou fora de qualquer alvo: não atira
             }
 
-            nextFireTime = Time.time + fireRate;
+            nextFireTime = Time.time + fireRate * FireRateMultiplier;
             Shoot(target);
         }
     }

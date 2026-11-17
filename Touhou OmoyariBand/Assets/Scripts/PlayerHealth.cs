@@ -36,6 +36,9 @@ public class PlayerHealth : MonoBehaviour
     {
         if (isInvincible) return;
 
+        // Invulnerabilidade das habilidades (dash / escudo)
+        if (PlayerAbilities.IsPlayerInvulnerable) return;
+
         currentLives -= damage;
 
         if (GameManager.Instance != null)

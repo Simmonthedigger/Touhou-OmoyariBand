@@ -274,6 +274,9 @@ GameObject:
   - component: {fileID: 30542084}
   - component: {fileID: 30542085}
   - component: {fileID: 30542086}
+  - component: {fileID: 30542089}
+  - component: {fileID: 30542088}
+  - component: {fileID: 30542087}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -581,6 +584,74 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &30542087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30542079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 367ae92e3464ff8429f4de96313d34f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityHUD
+  screenAnchor: {x: 0, y: 0}
+  offset: {x: 30, y: 30}
+  barSize: {x: 380, y: 34}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0.6}
+  readyColor: {r: 0.25, g: 0.8, b: 1, a: 1}
+  notReadyColor: {r: 0.35, g: 0.45, b: 0.6, a: 1}
+  activeColor: {r: 1, g: 0.85, b: 0.3, a: 1}
+--- !u!114 &30542088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30542079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2a35c7c3bb8ba34cb810614bf86b912, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAbilities
+  testAbility: {fileID: 0}
+  abilityAction:
+    m_Name: Habilidade
+    m_Type: 1
+    m_ExpectedControlType: 
+    m_Id: e6c852c6-3cdc-4471-a9ae-9a2c8979a519
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: d3653228-c734-4169-955e-0b099ca59b60
+      m_Path: <Keyboard>/space
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Habilidade
+      m_Flags: 0
+    m_Flags: 0
+  disableCollidersWhileInvulnerable: 0
+  invulnerableAlpha: 0.45
+--- !u!114 &30542089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30542079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d583a672443645d4eb8b3c99824f5e70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ManaSystem
+  maxMana: 100
+  startingMana: 0
+  manaPerScorePoint: 1
+  countTimePoints: 0
+  passiveRegenPerSecond: 1
 --- !u!114 &242445686 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7661086559769887519, guid: 9ffc23b68ea64674db99b506609f0fb0, type: 3}

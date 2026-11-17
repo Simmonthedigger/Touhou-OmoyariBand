@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de784f55d9cd4348a241d3910f732dc, type: 3}
+  m_Name: Invuneravel
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityData
+  displayName: Imnidade
+  description: 
+  icon: {fileID: 8314499683995590169, guid: 532341a80685d204f9c007ae4cfdf0d2, type: 3}
+  type: 2
+  manaCost: 30
+  manaCostPerSecond: 25
+  minManaToStart: 15
+  dashDistance: 3
+  dashDuration: 0.18
+  cooldown: 0.5
+  extraInvulnerability: 0.1
+  focusSpeedMultiplier: 0.6
+  fireRateMultiplier: 0.5
+  holdSpeedMultiplier: 1

@@ -25,6 +25,17 @@ public class PlayerController : MonoBehaviour
     private bool isFocused;
     private Camera mainCamera;
 
+    // --- Ganchos usados pelo PlayerAbilities (sistema de habilidades) ---
+    public Vector2 MoveInput => moveInput;
+    public bool IsDashing => dashing;
+    public float SpeedMultiplier { get; set; } = 1f;     // multiplica a velocidade (foco, etc.)
+    public bool ForceShowHitbox { get; set; }            // mostra a hitbox mesmo sem apertar o botão de foco
+
+    private bool dashing;
+    private Vector2 dashDirection;
+    private float dashSpeed;
+    private float dashTimeLeft;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -83,14 +94,28 @@ public class PlayerController : MonoBehaviour
 
         if (hitboxObject != null)
         {
-            hitboxObject.SetActive(isFocused);
+            hitboxObject.SetActive(isFocused || ForceShowHitbox);
         }
     }
 
     private void MovePlayer()
     {
-        float currentSpeed = isFocused ? focusSpeed : normalSpeed;
-        Vector2 targetPosition = rb.position + moveInput * (currentSpeed * Time.fixedDeltaTime);
+        Vector2 targetPosition;
+
+        if (dashing)
+        {
+            // Dash: ignora o input normal e anda reto na direção do dash
+            float step = Mathf.Min(Time.fixedDeltaTime, dashTimeLeft);
+            targetPosition = rb.position + dashDirection * (dashSpeed * step);
+
+            dashTimeLeft -= Time.fixedDeltaTime;
+            if (dashTimeLeft <= 0f) dashing = false;
+        }
+        else
+        {
+            float currentSpeed = (isFocused ? focusSpeed : normalSpeed) * SpeedMultiplier;
+            targetPosition = rb.position + moveInput * (currentSpeed * Time.fixedDeltaTime);
+        }
 
         if (limitToScreen && mainCamera != null)
         {
@@ -98,6 +123,17 @@ public class PlayerController : MonoBehaviour
         }
 
         rb.MovePosition(targetPosition);
+    }
+
+    /// <summary>Inicia um dash na direção dada (chamado pelo PlayerAbilities).</summary>
+    public void StartDash(Vector2 direction, float distance, float duration)
+    {
+        duration = Mathf.Max(0.01f, duration);
+
+        dashDirection = direction.normalized;
+        dashSpeed = distance / duration;
+        dashTimeLeft = duration;
+        dashing = true;
     }
 
     private Vector2 ClampToScreen(Vector2 targetPos)

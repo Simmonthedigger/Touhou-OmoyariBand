@@ -877,7 +877,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1, y: -111}
+  m_AnchoredPosition: {x: 55, y: -84}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &535246713
@@ -1370,6 +1370,66 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &919941131
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 919941132}
+  - component: {fileID: 919941133}
+  m_Layer: 5
+  m_Name: AbilitySelect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &919941132
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919941131}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1670471992}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -4.36, y: -199.64}
+  m_SizeDelta: {x: 434.72, y: 90.8464}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &919941133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919941131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 475cabb92e8782748b94611a1175f9e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilitySelectUI
+  abilities:
+  - {fileID: 11400000, guid: 8f78f4da4f6989e4cbe26783a78156e7, type: 2}
+  - {fileID: 11400000, guid: b9df307b4cbb9ac4492efe9c85f66818, type: 2}
+  - {fileID: 11400000, guid: 6df8c5184ec965349a674767d318199e, type: 2}
+  includeNoneOption: 1
+  noneLabel: Sem habilidade
+  buttonSize: {x: 150, y: 150}
+  spacing: 14
+  normalColor: {r: 1, g: 1, b: 1, a: 0.25}
+  selectedColor: {r: 0.3, g: 0.8, b: 1, a: 0.9}
+  descriptionText: {fileID: 0}
+  noneDescription: Nenhuma habilidade nesta fase.
 --- !u!1 &994186837
 GameObject:
   m_ObjectHideFlags: 0
@@ -1622,7 +1682,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1, y: -161}
+  m_AnchoredPosition: {x: 293, y: -74}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1155190409
@@ -1793,6 +1853,7 @@ RectTransform:
   - {fileID: 535246712}
   - {fileID: 1155190408}
   - {fileID: 2146519219}
+  - {fileID: 919941132}
   m_Father: {fileID: 793975897}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
