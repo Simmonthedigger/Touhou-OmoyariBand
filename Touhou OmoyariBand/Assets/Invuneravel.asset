@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8de784f55d9cd4348a241d3910f732dc, type: 3}
   m_Name: Invuneravel
   m_EditorClassIdentifier: Assembly-CSharp::AbilityData
-  displayName: Imnidade
+  displayName: Invulneravel
   description: 
   icon: {fileID: 8314499683995590169, guid: 532341a80685d204f9c007ae4cfdf0d2, type: 3}
   type: 2
