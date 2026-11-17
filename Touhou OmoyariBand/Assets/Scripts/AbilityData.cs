@@ -9,7 +9,10 @@ public enum AbilityType
     InvulnerableDash,
 
     /// <summary>Segurando: invulnerável enquanto o botão estiver apertado. Gasta mana por segundo.</summary>
-    InvulnerableHold
+    InvulnerableHold,
+
+    /// <summary>Segurando: atira no Boss automaticamente sem precisar do cursor sobre ele, com cadência reduzida.</summary>
+    AutoAim
 }
 
 /// <summary>
@@ -34,7 +37,7 @@ public class AbilityData : ScriptableObject
     [Tooltip("Custo FIXO ao ativar. Usado pelo Dash.")]
     public float manaCost = 30f;
 
-    [Tooltip("Custo por SEGUNDO enquanto o botão está segurado. Usado por Foco e Invulnerabilidade segurada.")]
+    [Tooltip("Custo por SEGUNDO enquanto o botão está segurado. Usado por Foco, Invulnerabilidade e Auto-Aim.")]
     public float manaCostPerSecond = 20f;
 
     [Tooltip("Mana mínima necessária para COMEÇAR uma habilidade segurada (evita ligar e desligar sem parar).")]
@@ -63,6 +66,10 @@ public class AbilityData : ScriptableObject
     [Header("Invulnerabilidade segurada (só para esse tipo)")]
     [Tooltip("Multiplica a velocidade do player enquanto está invulnerável. 1 = igual.")]
     public float holdSpeedMultiplier = 1f;
+
+    [Header("Auto-Aim / Mira Automática (só para esse tipo)")]
+    [Tooltip("Multiplica o intervalo entre tiros. Valores > 1 reduzem a cadência (ex.: 1.4 = atira um pouco mais devagar).")]
+    public float autoAimFireRateMultiplier = 1.4f;
 
     /// <summary>Texto curto do custo, para mostrar na interface.</summary>
     public string GetCostText()

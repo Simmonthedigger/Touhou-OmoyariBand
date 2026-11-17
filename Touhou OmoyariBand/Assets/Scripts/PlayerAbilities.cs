@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Executa a habilidade escolhida no seletor de fase. Vai no objeto do Player.
-/// Gasta mana do ManaSystem e controla foco, dash invulnerável e invulnerabilidade segurada.
+/// Gasta mana do ManaSystem e controla foco, dash invulnerável, invulnerabilidade segurada e auto-aim.
 /// </summary>
 [RequireComponent(typeof(PlayerController), typeof(ManaSystem))]
 public class PlayerAbilities : MonoBehaviour
@@ -22,8 +22,8 @@ public class PlayerAbilities : MonoBehaviour
     [SerializeField] private AbilityData testAbility;
 
     [Header("Tecla da habilidade")]
-    [Tooltip("Padrão: Espaço. Clique no + para adicionar outras teclas/botões (ex.: botão de gamepad).")]
-    [SerializeField] private InputAction abilityAction = new InputAction("Habilidade", InputActionType.Button, "<Keyboard>/space");
+    [Tooltip("Padrão: Botão Direito do Mouse. Clique no + para adicionar outras teclas/botões.")]
+    [SerializeField] private InputAction abilityAction = new InputAction("Habilidade", InputActionType.Button, "<Mouse>/rightButton");
 
     [Header("Invulnerabilidade")]
     [Tooltip("Desliga os Collider2D do player enquanto invulnerável. Funciona sem mexer no PlayerHealth. " +
@@ -92,8 +92,10 @@ public class PlayerAbilities : MonoBehaviour
             case AbilityType.InvulnerableDash:
                 return ProgressionState.IsAbilityUnlocked("Dash");
 
+            case AbilityType.AutoAim:
+                return ProgressionState.IsAbilityUnlocked("AutoAim");
+
             default:
-                // Qualquer outro enum de invulnerabilidade segurada
                 return ProgressionState.IsAbilityUnlocked("Invulnerabilidade");
         }
     }
@@ -154,7 +156,7 @@ public class PlayerAbilities : MonoBehaviour
         cooldownTimer = Current.dashDuration + Current.cooldown;
     }
 
-    // ---------------- Habilidades seguradas (Foco / Invulnerabilidade) ----------------
+    // ---------------- Habilidades seguradas (Foco / Invulnerabilidade / Auto-Aim) ----------------
 
     private void HandleHold()
     {
@@ -181,6 +183,14 @@ public class PlayerAbilities : MonoBehaviour
             controller.ForceShowHitbox = true;
             if (shooter != null) shooter.FireRateMultiplier = Current.fireRateMultiplier;
         }
+        else if (Current.type == AbilityType.AutoAim)
+        {
+            if (shooter != null)
+            {
+                shooter.AutoAimActive = true;
+                shooter.FireRateMultiplier = Current.autoAimFireRateMultiplier;
+            }
+        }
         else
         {
             controller.SpeedMultiplier = Current.holdSpeedMultiplier;
@@ -201,7 +211,11 @@ public class PlayerAbilities : MonoBehaviour
             controller.ForceShowHitbox = false;
         }
 
-        if (shooter != null) shooter.FireRateMultiplier = 1f;
+        if (shooter != null)
+        {
+            shooter.AutoAimActive = false;
+            shooter.FireRateMultiplier = 1f;
+        }
     }
 
     // ---------------- Invulnerabilidade ----------------

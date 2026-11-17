@@ -633,6 +633,14 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Habilidade
       m_Flags: 0
+    - m_Name: 
+      m_Id: b68a7ef2-91fa-4257-9a68-3315b2a8caa4
+      m_Path: <Mouse>/rightButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Habilidade
+      m_Flags: 0
     m_Flags: 0
   disableCollidersWhileInvulnerable: 0
   invulnerableAlpha: 0.45

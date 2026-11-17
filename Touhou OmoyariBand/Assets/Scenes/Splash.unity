@@ -130,6 +130,8 @@ GameObject:
   - component: {fileID: 160824474}
   - component: {fileID: 160824476}
   - component: {fileID: 160824475}
+  - component: {fileID: 160824478}
+  - component: {fileID: 160824477}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -194,6 +196,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 160824473}
   m_CullTransparentMesh: 1
+--- !u!114 &160824477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160824473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b9b7d7f84f64b49a02285d3574c0e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SplashFade
+  fadeInDuration: 0.8
+  holdDuration: 0.7
+  fadeOutDuration: 0.5
+--- !u!225 &160824478
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160824473}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &194855263
 GameObject:
   m_ObjectHideFlags: 0

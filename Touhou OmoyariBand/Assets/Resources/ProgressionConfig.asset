@@ -21,6 +21,9 @@ MonoBehaviour:
     unlocksAbilityId: Dash
   - sceneName: Gameplay 2
     displayName: Teste3
-    unlocksAbilityId: Invulneravel
+    unlocksAbilityId: Invulnerabilidade
+  - sceneName: Gameplay 3
+    displayName: Teste3
+    unlocksAbilityId: AutoAim
   lockStagesInOrder: 1
   editorUnlockAllWhenNoExperience: 1

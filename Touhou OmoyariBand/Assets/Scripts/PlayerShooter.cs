@@ -29,8 +29,11 @@ public class PlayerShooter : MonoBehaviour
     private ObjectPool<GameObject> bulletPool;
     private float nextFireTime;
 
-    /// <summary>Multiplica o intervalo entre tiros (usado pelo PlayerAbilities). 0.5 = atira 2x mais rápido.</summary>
+    /// <summary>Multiplica o intervalo entre tiros (usado pelo PlayerAbilities). 0.5 = atira 2x mais rápido; > 1 = mais lento.</summary>
     public float FireRateMultiplier { get; set; } = 1f;
+
+    /// <summary>Quando true, atira automaticamente no alvo ativo sem exigir o cursor sobre ele.</summary>
+    public bool AutoAimActive { get; set; }
 
     private Camera cam;
     private ContactFilter2D contactFilter;
@@ -66,7 +69,12 @@ public class PlayerShooter : MonoBehaviour
         {
             Transform target = null;
 
-            if (requireClickOnTarget)
+            if (AutoAimActive)
+            {
+                target = FindActiveTarget();
+                if (target == null) return; // nenhum alvo vivo/ativo na cena
+            }
+            else if (requireClickOnTarget)
             {
                 target = GetTargetUnderCursor();
                 if (target == null) return; // clicou fora de qualquer alvo: não atira
@@ -75,6 +83,25 @@ public class PlayerShooter : MonoBehaviour
             nextFireTime = Time.time + fireRate * FireRateMultiplier;
             Shoot(target);
         }
+    }
+
+    /// <summary>
+    /// Procura automaticamente na cena o primeiro objeto ativo com uma das tags de alvo (ex.: Boss).
+    /// </summary>
+    private Transform FindActiveTarget()
+    {
+        foreach (string tag in targetTags)
+        {
+            if (string.IsNullOrEmpty(tag)) continue;
+
+            GameObject found = GameObject.FindGameObjectWithTag(tag);
+            if (found != null && found.activeInHierarchy)
+            {
+                return found.transform;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -122,7 +149,7 @@ public class PlayerShooter : MonoBehaviour
         // Pega uma bala da pool
         GameObject bullet = bulletPool.Get();
 
-        // Faz a bala perseguir o alvo clicado
+        // Faz a bala perseguir o alvo clicado ou travado pelo Auto-Aim
         if (target != null && bullet.TryGetComponent(out PlayerBullet bulletScript))
         {
             bulletScript.SetTarget(target);

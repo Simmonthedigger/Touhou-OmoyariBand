@@ -2362,12 +2362,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8f78f4da4f6989e4cbe26783a78156e7, type: 2}
   - {fileID: 11400000, guid: b9df307b4cbb9ac4492efe9c85f66818, type: 2}
   - {fileID: 11400000, guid: 6df8c5184ec965349a674767d318199e, type: 2}
+  - {fileID: 11400000, guid: 5e350419f180f2942b584cb097e5fe2f, type: 2}
   includeNoneOption: 1
   noneLabel: Sem habilidade
   buttonSize: {x: 100, y: 100}
   spacing: 14
   normalColor: {r: 1, g: 1, b: 1, a: 0.25}
   selectedColor: {r: 0.3, g: 0.8, b: 1, a: 0.9}
+  lockedColor: {r: 0.15, g: 0.15, b: 0.15, a: 0.5}
   descriptionText: {fileID: 0}
   noneDescription: Nenhuma habilidade nesta fase.
 --- !u!1 &994186837
