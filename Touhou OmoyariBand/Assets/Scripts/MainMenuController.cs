@@ -39,6 +39,7 @@ public class MainMenuController : MonoBehaviour
     public void OnClick_ChangePlayer()
     {
         ProgressionState.ResetAll();
+        AbilitySelection.ResetSelection();
         ShowExperience();
     }
 

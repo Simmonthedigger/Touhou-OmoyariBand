@@ -9,13 +9,8 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerController), typeof(ManaSystem))]
 public class PlayerAbilities : MonoBehaviour
 {
-    /// <summary>
-    /// True enquanto o player está invulnerável. O PlayerHealth pode ler isto:
-    /// if (PlayerAbilities.IsPlayerInvulnerable) return; (antes de tirar vida)
-    /// </summary>
     public static bool IsPlayerInvulnerable { get; private set; }
 
-    // Garante o reset ao entrar no Play Mode (caso o Domain Reload esteja desativado)
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetStatics()
     {
@@ -68,10 +63,39 @@ public class PlayerAbilities : MonoBehaviour
     private void Start()
     {
         // Pelo menu: vale a escolha do seletor. Sem passar pelo menu (teste): vale a Test Ability.
-        Current = AbilitySelection.HasChosen ? AbilitySelection.Selected : testAbility;
+        AbilityData chosen = AbilitySelection.HasChosen ? AbilitySelection.Selected : testAbility;
+
+        // Trava de Progressão: só equipa a habilidade se ela estiver desbloqueada na sessão atual
+        if (chosen != null && IsCurrentAbilityUnlocked(chosen.type))
+        {
+            Current = chosen;
+        }
+        else
+        {
+            Current = null;
+        }
 
         shooter = GetComponentInChildren<PlayerShooter>(true);
         if (shooter == null) shooter = FindAnyObjectByType<PlayerShooter>();
+    }
+
+    /// <summary>
+    /// Mapeia o AbilityType do jogo para os IDs configurados no ProgressionConfig.asset.
+    /// </summary>
+    public static bool IsCurrentAbilityUnlocked(AbilityType type)
+    {
+        switch (type)
+        {
+            case AbilityType.Focus:
+                return ProgressionState.IsAbilityUnlocked("Focus");
+
+            case AbilityType.InvulnerableDash:
+                return ProgressionState.IsAbilityUnlocked("Dash");
+
+            default:
+                // Qualquer outro enum de invulnerabilidade segurada
+                return ProgressionState.IsAbilityUnlocked("Invulnerabilidade");
+        }
     }
 
     private void OnEnable()
@@ -107,7 +131,6 @@ public class PlayerAbilities : MonoBehaviour
         RefreshInvulnerability();
     }
 
-    // Sem habilidades em pausa, diálogo e contagem regressiva
     private static bool IsBlocked()
     {
         return Time.timeScale <= 0f || CutsceneState.IsActive || CutsceneState.IsCountdown;
@@ -120,7 +143,6 @@ public class PlayerAbilities : MonoBehaviour
         if (!abilityAction.WasPressedThisFrame()) return;
         if (cooldownTimer > 0f || controller.IsDashing) return;
 
-        // O dash vai na direção em que o player está se movendo; sem direção, não gasta mana
         Vector2 direction = controller.MoveInput;
         if (direction.sqrMagnitude < 0.01f) return;
 
@@ -143,7 +165,6 @@ public class PlayerAbilities : MonoBehaviour
             return;
         }
 
-        // Ativa: soltou o botão ou a mana acabou = desliga
         if (!abilityAction.IsPressed() || !mana.TrySpend(Current.manaCostPerSecond * Time.deltaTime))
         {
             StopHold();
@@ -197,7 +218,6 @@ public class PlayerAbilities : MonoBehaviour
         if (disableCollidersWhileInvulnerable) SetColliders(!wanted);
     }
 
-    // Deixa o player meio transparente enquanto invulnerável
     private void SetTint(bool invulnerable)
     {
         if (sprites == null) return;
@@ -242,7 +262,6 @@ public class PlayerAbilities : MonoBehaviour
         }
     }
 
-    /// <summary>Nome da tecla da habilidade (para mostrar na interface).</summary>
     public string GetKeyLabel()
     {
         string label = abilityAction.GetBindingDisplayString();

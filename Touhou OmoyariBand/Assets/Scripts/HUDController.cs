@@ -8,7 +8,9 @@ public class HUDController : MonoBehaviour
 
     [Header("Textos da HUD (Partida)")]
     [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private TextMeshProUGUI livesText;
+
+    [Header("Ícones de Vida (Coloque os 5 ícones na ordem)")]
+    [SerializeField] private GameObject[] lifeIcons;
 
     [Header("Painéis de UI")]
     [SerializeField] private GameObject pausePanel;
@@ -18,6 +20,8 @@ public class HUDController : MonoBehaviour
     [Header("Placar Final nos Painéis")]
     [SerializeField] private TextMeshProUGUI gameOverScoreText;
     [SerializeField] private TextMeshProUGUI victoryScoreText;
+
+    private int lastKnownLives = -1;
 
     private void Awake()
     {
@@ -31,15 +35,21 @@ public class HUDController : MonoBehaviour
             return;
         }
 
-        // Garante que todos os painéis comecem desativados
         if (pausePanel != null) pausePanel.SetActive(false);
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (victoryPanel != null) victoryPanel.SetActive(false);
     }
 
-    /// <summary>
-    /// Atualiza o texto de pontuação contínua da HUD.
-    /// </summary>
+    private void Start()
+    {
+        // Sincroniza caso o PlayerHealth tenha iniciado antes da cena HUD terminar de carregar aditivamente
+        PlayerHealth player = FindAnyObjectByType<PlayerHealth>();
+        if (player != null)
+        {
+            UpdateLives(player.GetCurrentLives());
+        }
+    }
+
     public void UpdateScore(int score)
     {
         if (scoreText != null)
@@ -49,19 +59,33 @@ public class HUDController : MonoBehaviour
     }
 
     /// <summary>
-    /// Atualiza o texto de vidas na HUD.
+    /// Ativa/desativa os ícones de vida na HUD conforme a quantidade atual.
     /// </summary>
     public void UpdateLives(int lives)
     {
-        if (livesText != null)
+        if (lifeIcons == null || lifeIcons.Length == 0) return;
+
+        for (int i = 0; i < lifeIcons.Length; i++)
         {
-            livesText.text = "Vidas: " + lives;
+            if (lifeIcons[i] == null) continue;
+
+            bool shouldBeActive = i < lives;
+            bool wasActive = lifeIcons[i].activeSelf;
+
+            lifeIcons[i].SetActive(shouldBeActive);
+
+            // Anima o ícone recém-ganho com um "pop" suave
+            if (shouldBeActive && !wasActive && lastKnownLives >= 0)
+            {
+                lifeIcons[i].transform.DOKill();
+                lifeIcons[i].transform.localScale = Vector3.zero;
+                lifeIcons[i].transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).SetUpdate(true);
+            }
         }
+
+        lastKnownLives = lives;
     }
 
-    /// <summary>
-    /// Ativa ou desativa a exibição do Painel de Pausa.
-    /// </summary>
     public void TogglePauseMenu(bool isPaused)
     {
         if (pausePanel != null)
@@ -97,11 +121,11 @@ public class HUDController : MonoBehaviour
         }
     }
 
-     public void OnClick_LoadStageScene(string sceneName)
+    public void OnClick_LoadStageScene(string sceneName)
     {
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.StartGameplay(sceneName); // Alterado aqui
+            GameManager.Instance.StartGameplay(sceneName);
         }
     }
 

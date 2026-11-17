@@ -14,15 +14,28 @@ public static class AbilitySelection
 
     public static void Select(AbilityData ability)
     {
+        // Se uma habilidade foi passada, só permite selecionar se estiver desbloqueada na sessão atual
+        if (ability != null && !PlayerAbilities.IsCurrentAbilityUnlocked(ability.type))
+        {
+            Debug.LogWarning($"[AbilitySelection] Tentativa de selecionar habilidade bloqueada: {ability.type}");
+            return;
+        }
+
         Selected = ability;
         HasChosen = true;
+    }
+
+    /// <summary>Limpa a habilidade escolhida (útil ao trocar de visitante no modo exposição).</summary>
+    public static void ResetSelection()
+    {
+        Selected = null;
+        HasChosen = false;
     }
 
     // Garante o reset ao entrar no Play Mode (caso o Domain Reload esteja desativado)
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetStatics()
     {
-        Selected = null;
-        HasChosen = false;
+        ResetSelection();
     }
 }

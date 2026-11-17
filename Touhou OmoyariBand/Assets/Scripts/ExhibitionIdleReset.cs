@@ -43,10 +43,25 @@ public class ExhibitionIdleReset : MonoBehaviour
         bool inMenu = SceneManager.GetActiveScene().name == menuSceneName;
         if (inMenu && !ProgressionState.HasSelectedExperience) return;   // já está na pergunta de nível
 
+        // 1. Limpa a progressão e a habilidade escolhida pelo visitante anterior
         ProgressionState.ResetAll();
-        Time.timeScale = 1f;               // caso a partida estivesse pausada
+        AbilitySelection.ResetSelection();
+
+        // 2. Garante que estados globais de cutscene/tempo/áudio estejam destravados
+        CutsceneState.End();
+        CutsceneState.EndCountdown();
+        Time.timeScale = 1f;
         AudioListener.pause = false;
-        SceneManager.LoadScene(menuSceneName);   // o Start do menu mostra o painel de experiência
+
+        // 3. Volta ao menu principal
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.GoToMainMenu();
+        }
+        else
+        {
+            SceneManager.LoadScene(menuSceneName);
+        }
     }
 
     private static bool AnyInput()

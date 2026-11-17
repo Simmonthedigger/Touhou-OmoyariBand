@@ -442,7 +442,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a6b61f1eec22d04eb048ad207e2d524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  maxLives: 3
+  startingLives: 3
+  maxLives: 5
   invincibilityDuration: 2
   flashInterval: 0.1
 --- !u!114 &30542085
@@ -959,6 +960,7 @@ MonoBehaviour:
   pointsPerBossHit: 50
   pointsLostOnDamage: 100
   allowNegativeScore: 0
+  pointsForExtraLife: 5000
 --- !u!4 &540726821
 Transform:
   m_ObjectHideFlags: 0

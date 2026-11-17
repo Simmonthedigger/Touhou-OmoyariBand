@@ -17,13 +17,14 @@ public class ScoreManager : MonoBehaviour
     [Tooltip("Permitir que a pontuação fique negativa ao perder pontos?")]
     [SerializeField] private bool allowNegativeScore = false;
 
-    private float currentScore;
+    [Header("Vida Extra por Pontuação")]
+    [Tooltip("A cada quantos pontos o jogador ganha +1 vida (0 = desativado).")]
+    [SerializeField] private int pointsForExtraLife = 5000;
 
-    /// <summary>
-    /// Disparado sempre que o jogador GANHA pontos.
-    /// Parâmetros: quantidade de pontos e se veio do tempo (true) ou de um acerto no Boss (false).
-    /// Usado pelo ManaSystem para converter pontos em mana.
-    /// </summary>
+    private float currentScore;
+    private int nextExtraLifeThreshold;
+    private PlayerHealth playerHealth;
+
     public event System.Action<float, bool> PointsGained;
 
     private void Awake()
@@ -41,34 +42,32 @@ public class ScoreManager : MonoBehaviour
     private void Start()
     {
         currentScore = 0f;
+        nextExtraLifeThreshold = pointsForExtraLife;
+        playerHealth = FindAnyObjectByType<PlayerHealth>();
         UpdateScoreUI();
     }
 
     private void Update()
     {
-        // Acumula pontos contínuos com base no tempo de jogo
         float timePoints = pointsPerSecond * Time.deltaTime;
         currentScore += timePoints;
         PointsGained?.Invoke(timePoints, true);
+
+        CheckExtraLife();
         UpdateScoreUI();
     }
 
-    /// <summary>
-    /// Chamado quando o tiro do jogador atinge o Boss.
-    /// </summary>
     public void AddBossHitPoints()
     {
         currentScore += pointsPerBossHit;
         PointsGained?.Invoke(pointsPerBossHit, false);
+
+        CheckExtraLife();
         UpdateScoreUI();
     }
 
-    /// <summary>
-    /// Chamado quando o jogador toma dano.
-    /// </summary>
     public void DeductDamagePoints()
     {
-        // Durante a invulnerabilidade de uma habilidade (dash / escudo), não perde pontos
         if (PlayerAbilities.IsPlayerInvulnerable) return;
 
         currentScore -= pointsLostOnDamage;
@@ -81,9 +80,22 @@ public class ScoreManager : MonoBehaviour
         UpdateScoreUI();
     }
 
-    /// <summary>
-    /// Retorna a pontuação atual em formato inteiro.
-    /// </summary>
+    private void CheckExtraLife()
+    {
+        if (pointsForExtraLife <= 0 || nextExtraLifeThreshold <= 0) return;
+
+        while (currentScore >= nextExtraLifeThreshold)
+        {
+            nextExtraLifeThreshold += pointsForExtraLife;
+
+            if (playerHealth == null) playerHealth = FindAnyObjectByType<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.AddLife(1);
+            }
+        }
+    }
+
     public int GetCurrentScore()
     {
         return Mathf.FloorToInt(currentScore);

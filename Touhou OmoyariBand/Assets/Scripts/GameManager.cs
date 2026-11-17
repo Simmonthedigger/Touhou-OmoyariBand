@@ -287,6 +287,9 @@ public class GameManager : MonoBehaviour
         if (isGameOver) return;
         isGameOver = true;
 
+        // 0. Registra a fase concluída na progressão da exposição
+        ProgressionState.MarkCompleted(gameplaySceneName);
+
         // 1. Destrói o Boss e todos os tiros em tela
         CleanUpEnemiesAndBullets();
 
@@ -302,7 +305,7 @@ public class GameManager : MonoBehaviour
             HUDController.Instance.ShowVictory(finalScore);
         }
 
-        // 5. Localiza o painel de Vitória com Leaderboard (mesmo se estiver desativado na cena/HUD) e envia os dados para a nuvem
+        // 5. Localiza o painel de Vitória com Leaderboard e envia os dados para a nuvem
         VictoryScreenUI victoryScreenUI = FindAnyObjectByType<VictoryScreenUI>(FindObjectsInactive.Include);
         if (victoryScreenUI != null)
         {

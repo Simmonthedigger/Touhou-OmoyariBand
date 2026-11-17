@@ -4,7 +4,8 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Configurações de Vida")]
-    [SerializeField] private int maxLives = 3;
+    [SerializeField] private int startingLives = 3;
+    [SerializeField] private int maxLives = 5;
     private int currentLives;
 
     [Header("Invencibilidade")]
@@ -23,13 +24,30 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
-        currentLives = maxLives;
+        currentLives = Mathf.Clamp(startingLives, 1, maxLives);
 
         // Notifica o GameManager sobre a vida inicial
         if (GameManager.Instance != null)
         {
             GameManager.Instance.UpdateLivesUI(currentLives);
         }
+    }
+
+    /// <summary>
+    /// Adiciona vida ao jogador até o limite máximo configurado (padrão: 5).
+    /// </summary>
+    public void AddLife(int amount = 1)
+    {
+        if (currentLives <= 0 || currentLives >= maxLives) return;
+
+        currentLives = Mathf.Min(currentLives + amount, maxLives);
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.UpdateLivesUI(currentLives);
+        }
+
+        Debug.Log($"[PlayerHealth] Vida extra ganha! Vidas atuais: {currentLives}/{maxLives}");
     }
 
     public void TakeDamage(int damage = 1)
@@ -39,7 +57,7 @@ public class PlayerHealth : MonoBehaviour
         // Invulnerabilidade das habilidades (dash / escudo)
         if (PlayerAbilities.IsPlayerInvulnerable) return;
 
-        currentLives -= damage;
+        currentLives = Mathf.Max(0, currentLives - damage);
 
         if (GameManager.Instance != null)
         {

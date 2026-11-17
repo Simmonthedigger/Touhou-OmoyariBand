@@ -6,14 +6,10 @@ using UnityEngine.UI;
 /// <summary>
 /// Seletor de habilidade: coloque em um objeto de UI vazio DENTRO do painel de seleção de fase.
 /// Ele cria sozinho um botão por habilidade (mais o "Sem habilidade") e guarda a escolha no AbilitySelection.
-/// Só uma habilidade pode ser escolhida por vez. A escolha é lembrada entre as sessões.
-/// Não coloque outros objetos dentro dele: os filhos são recriados toda vez que o painel abre.
+/// Respeita o ProgressionState: habilidades ainda não desbloqueadas na sessão ficam travadas.
 /// </summary>
 public class AbilitySelectUI : MonoBehaviour
 {
-    private const string PrefsKey = "SelectedAbilityName";
-    private const string NoneName = "None";
-
     [Header("Habilidades disponíveis")]
     [Tooltip("Arraste aqui os assets de habilidade (Assets > Create > Abilities > Ability).")]
     [SerializeField] private AbilityData[] abilities;
@@ -27,6 +23,7 @@ public class AbilitySelectUI : MonoBehaviour
     [SerializeField] private float spacing = 14f;
     [SerializeField] private Color normalColor = new Color(1f, 1f, 1f, 0.25f);
     [SerializeField] private Color selectedColor = new Color(0.3f, 0.8f, 1f, 0.9f);
+    [SerializeField] private Color lockedColor = new Color(0.15f, 0.15f, 0.15f, 0.5f);
 
     [Header("Descrição (opcional)")]
     [Tooltip("Texto onde aparece a descrição e o custo da habilidade escolhida.")]
@@ -36,7 +33,6 @@ public class AbilitySelectUI : MonoBehaviour
     private readonly List<AbilityData> entries = new List<AbilityData>(); // null = "sem habilidade"
     private readonly List<Image> buttonBackgrounds = new List<Image>();
 
-    // O painel pode começar desativado: a lista é montada toda vez que ele abre
     private void OnEnable()
     {
         Rebuild();
@@ -44,7 +40,6 @@ public class AbilitySelectUI : MonoBehaviour
 
     private void Rebuild()
     {
-        // Limpa os botões antigos
         foreach (Transform child in transform)
         {
             Destroy(child.gameObject);
@@ -64,8 +59,8 @@ public class AbilitySelectUI : MonoBehaviour
             }
         }
 
-        // Primeira vez no seletor: restaura a última escolha salva
-        if (!AbilitySelection.HasChosen) RestoreSavedSelection();
+        // Garante que nenhuma habilidade bloqueada de um visitante anterior permaneça selecionada
+        ValidateCurrentSelection();
 
         for (int i = 0; i < entries.Count; i++)
         {
@@ -75,7 +70,6 @@ public class AbilitySelectUI : MonoBehaviour
         RefreshHighlight();
     }
 
-    // Organiza os botões lado a lado
     private void SetupLayout()
     {
         HorizontalLayoutGroup layout = GetComponent<HorizontalLayoutGroup>();
@@ -89,32 +83,41 @@ public class AbilitySelectUI : MonoBehaviour
         layout.childForceExpandHeight = false;
     }
 
-    private void RestoreSavedSelection()
+    private void ValidateCurrentSelection()
     {
-        string saved = PlayerPrefs.GetString(PrefsKey, NoneName);
-
-        AbilityData found = null;
-        if (saved != NoneName)
+        // Se já havia uma habilidade selecionada, verifica se ela ainda está desbloqueada para o visitante atual
+        if (AbilitySelection.HasChosen)
         {
-            foreach (AbilityData entry in entries)
+            AbilityData current = AbilitySelection.Selected;
+            if (current != null && !PlayerAbilities.IsCurrentAbilityUnlocked(current.type))
             {
-                if (entry != null && entry.name == saved)
-                {
-                    found = entry;
-                    break;
-                }
+                AbilitySelection.ResetSelection();
             }
         }
 
-        // Sem o botão "sem habilidade", precisa haver uma escolha: usa a primeira
-        if (found == null && !includeNoneOption && entries.Count > 0) found = entries[0];
-
-        AbilitySelection.Select(found);
+        // Se ainda não há escolha válida, seleciona "Sem habilidade" (ou a primeira liberada)
+        if (!AbilitySelection.HasChosen)
+        {
+            AbilityData fallback = null;
+            if (!includeNoneOption)
+            {
+                foreach (AbilityData entry in entries)
+                {
+                    if (entry != null && PlayerAbilities.IsCurrentAbilityUnlocked(entry.type))
+                    {
+                        fallback = entry;
+                        break;
+                    }
+                }
+            }
+            AbilitySelection.Select(fallback);
+        }
     }
 
     private void CreateButton(int index)
     {
         AbilityData ability = entries[index];
+        bool unlocked = ability == null || PlayerAbilities.IsCurrentAbilityUnlocked(ability.type);
         bool hasIcon = ability != null && ability.icon != null;
 
         GameObject go = new GameObject("AbilityButton_" + index, typeof(RectTransform), typeof(Image), typeof(Button));
@@ -125,12 +128,17 @@ public class AbilitySelectUI : MonoBehaviour
         rt.sizeDelta = buttonSize;
 
         Image background = go.GetComponent<Image>();
-        background.color = normalColor;
+        background.color = unlocked ? normalColor : lockedColor;
         buttonBackgrounds.Add(background);
 
         Button button = go.GetComponent<Button>();
         button.targetGraphic = background;
-        button.onClick.AddListener(() => OnButtonClicked(index));
+        button.interactable = unlocked;
+
+        if (unlocked)
+        {
+            button.onClick.AddListener(() => OnButtonClicked(index));
+        }
 
         // Ícone (opcional)
         if (hasIcon)
@@ -149,9 +157,10 @@ public class AbilitySelectUI : MonoBehaviour
             icon.sprite = ability.icon;
             icon.preserveAspect = true;
             icon.raycastTarget = false;
+            icon.color = unlocked ? Color.white : new Color(0.4f, 0.4f, 0.4f, 0.6f);
         }
 
-        // Nome
+        // Nome ou aviso de bloqueio
         GameObject labelObj = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
         labelObj.layer = gameObject.layer;
 
@@ -163,10 +172,22 @@ public class AbilitySelectUI : MonoBehaviour
         labelRt.offsetMax = new Vector2(-4f, -2f);
 
         TextMeshProUGUI label = labelObj.GetComponent<TextMeshProUGUI>();
-        label.text = ability != null ? ability.displayName : noneLabel;
+        if (ability == null)
+        {
+            label.text = noneLabel;
+        }
+        else if (unlocked)
+        {
+            label.text = ability.displayName;
+        }
+        else
+        {
+            label.text = $"{ability.displayName}\n<size=70%><color=#FF6B6B>[BLOQUEADA]</color></size>";
+        }
+
         label.alignment = TextAlignmentOptions.Center;
         label.fontStyle = FontStyles.Bold;
-        label.color = Color.white;
+        label.color = unlocked ? Color.white : new Color(0.7f, 0.7f, 0.7f, 0.8f);
         label.enableAutoSizing = true;
         label.fontSizeMin = 12f;
         label.fontSizeMax = 26f;
@@ -177,18 +198,20 @@ public class AbilitySelectUI : MonoBehaviour
     {
         AbilityData chosen = entries[index];
         AbilitySelection.Select(chosen);
-
-        PlayerPrefs.SetString(PrefsKey, chosen != null ? chosen.name : NoneName);
-        PlayerPrefs.Save();
-
         RefreshHighlight();
     }
 
-    // Destaca o botão escolhido e atualiza a descrição
     private void RefreshHighlight()
     {
         for (int i = 0; i < buttonBackgrounds.Count; i++)
         {
+            bool unlocked = entries[i] == null || PlayerAbilities.IsCurrentAbilityUnlocked(entries[i].type);
+            if (!unlocked)
+            {
+                buttonBackgrounds[i].color = lockedColor;
+                continue;
+            }
+
             bool selected = entries[i] == AbilitySelection.Selected;
             buttonBackgrounds[i].color = selected ? selectedColor : normalColor;
         }
