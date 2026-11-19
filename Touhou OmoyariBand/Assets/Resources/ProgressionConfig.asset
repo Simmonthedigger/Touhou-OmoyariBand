@@ -25,5 +25,8 @@ MonoBehaviour:
   - sceneName: Gameplay 3
     displayName: Teste3
     unlocksAbilityId: AutoAim
+  - sceneName: Gameplay 4
+    displayName: Teste3
+    unlocksAbilityId: 
   lockStagesInOrder: 1
   editorUnlockAllWhenNoExperience: 1
