@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(splashSceneName);
 
         // Aguarda os 2 segundos exigidos na tela de Splash
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(8.0f);
 
         // Transita automaticamente para o Menu Principal
         GoToMainMenu();
